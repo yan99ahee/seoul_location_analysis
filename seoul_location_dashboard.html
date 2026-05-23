@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서울 30대 주거 입지 선택 가이드 (30s Seoul Housing Navigator)</title>
+    <!-- Google Fonts 및 Plotly/ECharts CDN 추가 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        /* ----------------------------------------------------
+           Modern CSS Reset & Design System Tokens (HSL tailered)
+           ---------------------------------------------------- */
+        :root {
+            --bg-main: #f0f4f8;
+            --bg-card: #ffffff;
+            --primary: #4f46e5;
+            --primary-light: #e0e7ff;
+            --accent: #db2777;
+            --accent-light: #fce7f3;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --slate: #475569;
+            --slate-light: #f1f5f9;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.03);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 24px;
+            line-height: 1.6;
+        }
+
+        /* ----------------------------------------------------
+           Bento Grid Layout
+           ---------------------------------------------------- */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header UI */
+        header {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            color: white;
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-left h1 {
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .header-left p {
+            font-weight: 300;
+            opacity: 0.85;
+            font-size: 14px;
+        }
+
+        .header-badge {
+            background-color: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 8px 16px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Dashboard Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 420px 1fr 340px;
+            gap: 24px;
+        }
+
+        @media (max-width: 1200px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Common Bento Card style */
+        .bento-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: var(--transition);
+        }
+
+        .bento-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0f172a;
+            border-bottom: 2px solid var(--slate-light);
+            padding-bottom: 10px;
+        }
+
+        /* Left Panel Styles (Filters & Sliders) */
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--slate);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid #cbd5e1;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-main);
+            outline: none;
+            background-color: white;
+            transition: var(--transition);
+        }
+
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        /* 8대 프리셋 퀵 카드 */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .preset-btn {
+            background-color: var(--slate-light);
+            border: 1px solid transparent;
+            padding: 10px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .preset-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .preset-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .preset-icon {
+            font-size: 18px;
+        }
+
+        /* 9대 슬라이더 */
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        /* 슬라이더 스크롤바 디자인 */
+        .slider-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        .slider-container::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 99px;
+        }
+
+        .slider-row {
+            background-color: var(--slate-light);
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .slider-row:hover {
+            border-color: #cbd5e1;
+            background-color: #f8fafc;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .slider-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        /* 등급별 칼라 매핑 */
+        .badge-gray { background-color: #94a3b8; }
+        .badge-yellow { background-color: #eab308; }
+        .badge-purple { background-color: #a855f7; }
+        .badge-blue { background-color: #3b82f6; }
+        .badge-green { background-color: #10b981; }
+
+        .slider-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slider-side-text {
+            font-size: 10px;
+            color: var(--text-muted);
+            width: 50px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #cbd5e1;
+            border-radius: 99px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Central Map Style (Interactive SVG Map) */
+        .map-card {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .map-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 520px;
+            position: relative;
+        }
+
+        /* ECharts Map Container Styling */
+        #map-chart {
+            width: 100%;
+            height: 100%;
+            min-height: 520px;
+        }
+
+        /* 프리미엄 카드형 툴팁 */
+        .map-tooltip {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-md);
+            padding: 16px;
+            box-shadow: var(--shadow-lg);
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+            width: 280px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tooltip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1.5px solid var(--slate-light);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tooltip-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .tooltip-score {
+            font-size: 12px;
+            font-weight: 900;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), #6366f1);
+            padding: 3px 8px;
+            border-radius: 99px;
+        }
+
+        .tooltip-section {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .tooltip-section-title {
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .tooltip-row {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-main);
+            margin-bottom: 2px;
+        }
+
+        .tooltip-infra-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .tooltip-infra-item {
+            font-size: 10px;
+            background-color: var(--slate-light);
+            padding: 3px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .tooltip-infra-item.highlight {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+        }
+
+        .tooltip-warning {
+            background-color: var(--warning-light);
+            color: #78350f;
+            border: 1px dashed #f59e0b;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* Right Ranking Panel Styles */
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 520px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .ranking-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .ranking-list::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 99px;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background-color: var(--slate-light);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: var(--transition);
+        }
+
+        .ranking-item:hover {
+            transform: translateX(-4px);
+            background-color: var(--primary-light);
+            border-color: rgba(79, 70, 229, 0.2);
+        }
+
+        .ranking-item.selected {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .rank-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--slate);
+            width: 24px;
+        }
+
+        .ranking-item:nth-child(1) .rank-num { color: #f59e0b; font-size: 18px; }
+        .ranking-item:nth-child(2) .rank-num { color: #94a3b8; font-size: 17px; }
+        .ranking-item:nth-child(3) .rank-num { color: #b45309; font-size: 16px; }
+
+        .rank-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .rank-name-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rank-name {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        .rank-score {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .rank-bar-bg {
+            height: 4px;
+            background-color: #cbd5e1;
+            border-radius: 99px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .rank-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #6366f1);
+            border-radius: 99px;
+            transition: width 0.4s ease;
+        }
+
+        .rank-badge {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 4px;
+            background-color: var(--success);
+            color: white;
+        }
+
+        /* ----------------------------------------------------
+           Compare Tool Box
+           ---------------------------------------------------- */
+        .compare-section {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .compare-card {
+            background: linear-gradient(135deg, #4f46e5, #312e81);
+            color: white;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 240px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .compare-card.accent {
+            background: linear-gradient(135deg, #db2777, #701a75);
+        }
+
+        .compare-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            opacity: 0.85;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .compare-card-winner {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .compare-card-desc {
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.5;
+            max-width: 480px;
+            opacity: 0.95;
+        }
+
+        /* ----------------------------------------------------
+           9대 인터랙티브 차트 보드
+           ---------------------------------------------------- */
+        .charts-board-title {
+            font-size: 22px;
+            font-weight: 900;
+            margin-top: 16px;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 3.5px solid var(--primary);
+            padding-bottom: 8px;
+            width: fit-content;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chart-card-header {
+            border-bottom: 1.5px solid var(--slate-light);
+            padding-bottom: 8px;
+        }
+
+        .chart-card-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .chart-plot-area {
+            width: 100%;
+            height: 380px;
+        }
+
+        .chart-desc-box {
+            background-color: var(--slate-light);
+            border-left: 3px solid var(--primary);
+            padding: 10px 14px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 12px;
+            color: var(--slate);
+            font-weight: 500;
+        }
+
+        /* ----------------------------------------------------
+           6단계 체크리스트 & 최종 비즈니스 결론 UI
+           ---------------------------------------------------- */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checklist-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .checklist-number {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checklist-text {
+            font-size: 13px;
+        }
+
+        .checklist-text strong {
+            color: var(--text-main);
+        }
+
+        .conclusion-box {
+            background-color: #1e1b4b;
+            color: white;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .conclusion-item {
+            border-left: 3px solid var(--accent);
+            padding-left: 14px;
+            font-size: 13px;
+        }
+
+        .conclusion-item strong {
+            color: #fbcfe8;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* ----------------------------------------------------
+           Map Legend & Extra Styles
+           ---------------------------------------------------- */
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .legend-gradient {
+            width: 100px;
+            height: 10px;
+            background: linear-gradient(90deg, #f3e8ff, var(--primary));
+            border-radius: 99px;
+        }
+
+        .legend-labels {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ----------------------------------------------------
+       Header Block
+       ---------------------------------------------------- -->
+    <header>
+        <div class="header-left">
+            <h1>서울 30대 주거 입지 Navigator</h1>
+            <p>인구·고용·매출·실거래가 및 문화 SOC 3대 심층 분석 데이터셋 연계 지능형 대시보드</p>
+        </div>
+        <div class="header-badge">MASTER 통합 버전 (2024년)</div>
+    </header>
+
+    <!-- ----------------------------------------------------
+       Bento Grid Dashboard
+       ---------------------------------------------------- -->
+    <div class="bento-grid">
+
+        <!-- Bento Card 1: Left Panel (Interactive Filters & Preset Cards) -->
+        <div class="bento-card" style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="card-title">🔍 나의 입지 매칭 조작계</div>
+            
+            <div class="control-group">
+                <label class="control-label">🚇 나의 직장 자치구 설정</label>
+                <select id="office-select" onchange="updateDashboard()">
+                    <option value="">-- 직장 위치 선택 (보너스 점수) --</option>
+                    <!-- 25개 자치구 바인딩 -->
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">⚡ 8대 라이프스타일 퀵 프리셋</label>
+                <div class="preset-grid">
+                    <button class="preset-btn" onclick="applyPreset(0, this)">
+                        <span class="preset-icon">🚇</span>
+                        <span>출퇴근 최우선</span>
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset(1, this)">
+                        <span class="preset-icon">🏠</span>
+                        <span>재택근무형</span>
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset(2, this)">
+                        <span class="preset-icon">🌙</span>
+                        <span>야근러 직장인</span>
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset(3, this)">
+                        <span class="preset-icon">🍻</span>
+                        <span>사회생활 중심</span>
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset(4, this)">
+                        <span class="preset-icon">💰</span>
+                        <span>가성비 추구형</span>
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset(5, this)">
+                        <span class="preset-icon">⚖️</span>
+                        <span>균형 잡힌</span>
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset(6, this)">
+                        <span class="preset-icon">🐣</span>
+                        <span>자취 초보</span>
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset(7, this)">
+                        <span class="preset-icon">📈</span>
+                        <span>커리어 집중형</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-group" style="flex-grow: 1;">
+                <label class="control-label">🎚️ 9대 미세 가중치 슬라이더</label>
+                <div class="slider-container" id="sliders-box">
+                    <!-- 9대 가중치 슬라이더 자동 생성 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Bento Card 2: Central Map (Pastel Heatmap Map) -->
+        <div class="bento-card map-card">
+            <div class="card-title">🗺️ 서울시 25개 자치구 추천 히트맵</div>
+            
+            <div class="map-container" style="padding: 0; min-height: 520px; display: block; position: relative;">
+                <div id="map-chart" style="width: 100%; height: 520px;"></div>
+            </div>
+        </div>
+
+        <!-- Bento Card 3: Right Panel (Real-time Sorting List) -->
+        <div class="bento-card">
+            <div class="card-title">🏆 최적 추천 자치구 순위</div>
+            <div class="ranking-list" id="rank-box">
+                <!-- 자치구 정렬 랭킹 동적 생성 -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ----------------------------------------------------
+       Compare Tool Section
+       ---------------------------------------------------- -->
+    <div class="compare-section">
+        <div class="card-title" style="border: none; margin-bottom: 12px; padding: 0;">⚖️ 자치구 정밀 비교 및 추천 판정 도구 (Ranking Click)</div>
+        <div class="compare-grid">
+            <!-- 그라디언트 승자 판정 카드 -->
+            <div class="compare-card" id="winner-card">
+                <div class="compare-card-title">AI 종합 추천 판정</div>
+                <div class="compare-card-winner" id="winner-name">강서구 VS 관악구</div>
+                <div class="compare-card-desc" id="winner-desc">우측 순위표에서 원하시는 자치구를 클릭하시면 즉시 대조 판정 및 Plotly.js 9차원 분석 비교 레이더 차트가 이곳에 시각화됩니다!</div>
+            </div>
+            <!-- 다차원 비교 레이더 차트 -->
+            <div class="chart-card" style="padding: 16px;">
+                <div class="chart-card-title" style="font-size: 13px; color: var(--text-muted);">9차원 주거 및 인프라 실시간 매칭 차트 (Plotly.js)</div>
+                <div id="radar-plot" style="width: 100%; height: 210px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ----------------------------------------------------
+       9대 Plotly 차트 보드
+       ---------------------------------------------------- -->
+    <div class="charts-board-title">📊 서울시 3대 마스터 리포트 연계 통합 9대 시각화 보드</div>
+    
+    <div class="charts-grid">
+        
+        <!-- 차트 1: 자치구별 인구 규모 (트리맵) -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">1. 서울시 자치구별 총인구수 규모 (Treemap)</div>
+            </div>
+            <div class="chart-plot-area" id="plot-1"></div>
+            <div class="chart-desc-box">송파구, 강서구, 노원구, 강남구 순의 두터운 인구 규모를 시각화하여, 배후 수요가 보장된 메이저 주거 정주 벨트의 실체를 한눈에 체감할 수 있습니다.</div>
+        </div>
+
+        <!-- 차트 2: 연령별 1인가구 남녀 분포 (피라미드) -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">2. 서울 연령대별 1인가구 남녀 분포 피라미드 (30대 강조)</div>
+            </div>
+            <div class="chart-plot-area" id="plot-2"></div>
+            <div class="chart-desc-box">30대 초반(30~34세) 구간의 급격하게 팽창한 1인가구 부피(특히 남성 최대 규모)를 통해 30대 타깃 맞춤 정주 전략의 거대한 비즈니스 시장 가치를 증명합니다.</div>
+        </div>
+
+        <!-- 차트 3: 30대 1인가구 주거 형태 (선버스트) -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">3. 서울 30대 1인가구 주요 거처 종류 비중 (Sunburst)</div>
+            </div>
+            <div class="chart-plot-area" id="plot-3"></div>
+            <div class="chart-desc-box">아파트(20.8%) 대비 다세대 및 오피스텔 등 **'비아파트형 주거 형태'가 73%**에 수렴하고 있음을 보여주어, 주거 가성비를 고려한 빌라/오피스텔 임대 안정성의 결정적 당위성을 제언합니다.</div>
+        </div>
+
+        <!-- 차트 4: 연령대별 주거 형태 비교 (레이더) -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">4. 연령대별(20대 vs 30대 vs 40대) 거처 종류 점유 레이더 비교</div>
+            </div>
+            <div class="chart-plot-area" id="plot-4"></div>
+            <div class="chart-desc-box">20대에서 30대, 40대로 이행할수록 오피스텔(주택외거처)에서 단지형 아파트 거주로 상향 이동하는 **'주거 사다리' 스텝업 곡선**이 통계적으로 명확히 입증됩니다.</div>
+        </div>
+
+        <!-- 차트 5: 시간대별 생활인구 히트맵 -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">5. 서울 자치구별 24시간대 30대 생활인구 밀도 추이 (Heatmap)</div>
+            </div>
+            <div class="chart-plot-area" id="plot-5"></div>
+            <div class="chart-desc-box">업무 시간대(09~17시) 강남, 중구, 여의도의 초고밀도 주간 유입 인구와 퇴근 후 관악, 강서, 마포로 수렴하는 거동을 통해 서울의 일자리-주거 흐름을 추적합니다.</div>
+        </div>
+
+        <!-- 차트 6: 주야간 대비 바 차트 -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">6. 자치구별 30대 주간(일터) vs 야간(주거) 생활인구 1대1 비교</div>
+            </div>
+            <div class="chart-plot-area" id="plot-6"></div>
+            <div class="chart-desc-box">강남, 중구, 서초 등 대기업 의사결정 본사가 집중된 '대표 업무지구'와 관악, 강서, 동작 등 가성비 주거 기능 중심의 '베드타운'을 완벽하게 극단 분리하여 제시합니다.</div>
+        </div>
+
+        <!-- 차트 7: 수평 막대차트 (산업종사자 Top 8) -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">7. 서울 주요 산업 대분류 종사자 수 랭킹 Top 8</div>
+            </div>
+            <div class="chart-plot-area" id="plot-7"></div>
+            <div class="chart-desc-box">도소매, 정보통신, 전문서비스 등 30대 급여근로자들이 대거 진입한 지식/정보서비스 업종의 거대한 고용 규모를 보여주어 정주 선택의 근거를 보강합니다.</div>
+        </div>
+
+        <!-- 차트 8: 서울 1인가구 유입 흐름 (생키) -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">8. 서울시 전입 1인가구의 거대한 유입 생키 다이어그램 (Sankey)</div>
+            </div>
+            <div class="chart-plot-area" id="plot-8"></div>
+            <div class="chart-desc-box">서울 내 자치구 간 연쇄적 이동 흐름뿐만 아니라, 경기도 등 외부 수도권으로부터의 연간 6만 명 이상의 압도적인 서울 청년 전입 경로를 지능형 흐름으로 추적합니다.</div>
+        </div>
+
+        <!-- 차트 9: 가계수지 항목별 편차 차트 (가계수지 팩트) -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">9. 2024 가계수지 기반 도시 1인가구 vs 전국 지출 편차 비교</div>
+            </div>
+            <div class="chart-plot-area" id="plot-9"></div>
+            <div class="chart-desc-box">도시 1인가구 지출 1위인 외식비(42.8만 원)와 2위인 주거비(35.1만 원)의 할증 팩트를 증명하여, 주거지 선택 시 예산 방어를 위한 공공 인프라 혜택 연계의 필요성을 증명합니다.</div>
+        </div>
+
+    </div>
+
+    <!-- ----------------------------------------------------
+       Footer Block (6단계 체크리스트 & 비즈니스 결론)
+       ---------------------------------------------------- -->
+    <div class="footer-grid">
+        
+        <div class="bento-card">
+            <div class="card-title">📝 주거 입지 탐색 6단계 의사결정 워크플로우</div>
+            <div class="checklist-row">
+                <div class="checklist-number">1</div>
+                <div class="checklist-text"><strong>직장 위치 핀포인트 매핑</strong>: 나의 직장 드롭다운을 설정하여 인접 자치구들에 보너스 연산 버프 점수를 자동으로 부여합니다.</div>
+            </div>
+            <div class="checklist-row">
+                <div class="checklist-number">2</div>
+                <div class="checklist-text"><strong>라이프스타일 프리셋/가중치 조절</strong>: 8대 퀵 버튼을 이용하거나 9대 지표 슬라이더를 수동 조절하여 개인의 취향을 투영합니다.</div>
+            </div>
+            <div class="checklist-row">
+                <div class="checklist-number">3</div>
+                <div class="checklist-text"><strong>지도 및 실시간 순위표 대조</strong>: 0~100점 히트맵 지도의 짙은 인디고 색 구역과 우측 순위표의 Top 3 후보 자치구를 1차 필터링합니다.</div>
+            </div>
+            <div class="checklist-row">
+                <div class="checklist-number">4</div>
+                <div class="checklist-text"><strong>정밀 비교 판정단 작동</strong>: 순위표를 클릭하여 두 후보지를 매칭하고, 레이더 다차원 차트와 승자 판정 감성 리포트를 확인합니다.</div>
+            </div>
+            <div class="checklist-row">
+                <div class="checklist-number">5</div>
+                <div class="checklist-text"><strong>가계 지출 주거 다이어트 점검</strong>: 가계수지 차트와 실거래가 데이터를 고려해 자치구 평균가 대비 나의 보증금 한계를 대조해봅니다.</div>
+            </div>
+            <div class="checklist-row">
+                <div class="checklist-number">6</div>
+                <div class="checklist-text"><strong>최종 선택지 야간 현장 임장</strong>: 대시보드의 시간대별 히트맵을 기초 삼아, 주말 및 야간(20~23시)에 골목길(8m미만) 치안과 가로등 조도를 직접 방문 확인합니다.</div>
+            </div>
+        </div>
+
+        <div class="conclusion-box">
+            <div class="card-title" style="color: white; border-color: rgba(255,255,255,0.15)">📢 대시보드 내포 비즈니스 마스터 결론</div>
+            <div class="conclusion-item">
+                <strong>1. 서울시 30대 1인가구의 실거주 안전 요새</strong>
+                야간 생활인구 정밀 빅데이터 결과 관악구, 강서구, 마포구, 영등포구, 송파구 순으로 30대 1인가구가 철저히 밀집되어 있습니다. 이는 각 중심업무지구(GBD, YBD, CBD)로의 지하철 직주 쾌속망이 보장된 최적의 거점 요새들입니다.
+            </div>
+            <div class="conclusion-item">
+                <strong>2. 비아파트 중심의 유연한 거주 전략 수용</strong>
+                30대 1인가구의 무려 73%가 단지형 아파트가 아닌 주거형 오피스텔(25%), 다세대빌라(28%), 다가구원룸(18%)에 집중 거주합니다. 주택의 섣부른 매매보다 보증금 사기로부터의 금융 보호와 전월세 안정성이 삶의 질을 대변합니다.
+            </div>
+            <div class="conclusion-item">
+                <strong>3. 고정 지출 경직성 방어를 위한 '공공 SOC' 대체 전략</strong>
+                도시 1인가구 가계지출 1위는 외식비, 2위는 주거비입니다. 시세가 비싼 곳에 무리하게 진입하는 것보다, 도서관(서초/도봉), 공원(송파/강서), 체육시설이 잘 정비되어 **'개인 지출을 무료 공공 혜택으로 완전히 상쇄할 수 있는 구'**를 택하는 것이 현명한 가처분소득 방어 전략입니다.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ----------------------------------------------------
+   Core Logic & Database 인라인 구축 (CORS 에러 예방)
+   ---------------------------------------------------- -->
+<script>
+    // 25개 자치구별 3개 리포트 팩트 데이터베이스 통합 매핑
+    const DISTRICT_DATA = {
+        '강남구': { name: '강남구', residence: 90, lwb: 95, jobs: 100, community: 78, park: 7, library: 33, culture: 102, movie: 115, gym: 10, price: 20.6, households: 45599, neighbors: ['서초구', '송파구', '성동구'] },
+        '강동구': { name: '강동구', residence: 68, lwb: 55, jobs: 48, community: 62, park: 7, library: 12, culture: 14, movie: 4, gym: 14, price: 7.2, households: 25110, neighbors: ['송파구', '광진구'] },
+        '강북구': { name: '강북구', residence: 45, lwb: 40, jobs: 35, community: 50, park: 4, library: 11, culture: 16, movie: 4, gym: 8, price: 4.1, households: 14758, neighbors: ['성북구', '도봉구', '노원구'] },
+        '강서구': { name: '강서구', residence: 95, lwb: 65, jobs: 70, community: 82, park: 10, library: 19, culture: 18, movie: 12, gym: 16, price: 5.8, households: 37411, neighbors: ['양천구', '구로구'] },
+        '관악구': { name: '관악구', residence: 100, lwb: 50, jobs: 55, community: 95, park: 2, library: 9, culture: 17, movie: 5, gym: 19, price: 5.0, households: 45110, neighbors: ['동작구', '구로구', '금천구', '서초구'] },
+        '광진구': { name: '광진구', residence: 75, lwb: 60, jobs: 52, community: 78, park: 3, library: 10, culture: 22, movie: 8, gym: 12, price: 7.8, households: 23110, neighbors: ['성동구', '동대문구', '중랑구', '강동구', '송파구'] },
+        '구로구': { name: '구로구', residence: 70, lwb: 72, jobs: 75, community: 68, park: 4, library: 13, culture: 18, movie: 7, gym: 14, price: 5.2, households: 22100, neighbors: ['강서구', '양천구', '영등포구', '금천구', '동작구', '관악구'] },
+        '금천구': { name: '금천구', residence: 55, lwb: 78, jobs: 65, community: 64, park: 2, library: 7, culture: 12, movie: 3, gym: 9, price: 4.4, households: 17273, neighbors: ['구로구', '관악구', '영등포구'] },
+        '노원구': { name: '노원구', residence: 85, lwb: 45, jobs: 50, community: 58, park: 8, library: 25, culture: 28, movie: 9, gym: 17, price: 5.1, households: 35110, neighbors: ['도봉구', '강북구', '성북구', '중랑구'] },
+        '도봉구': { name: '도봉구', residence: 42, lwb: 38, jobs: 30, community: 48, park: 3, library: 10, culture: 15, movie: 3, gym: 7, price: 4.2, households: 15468, neighbors: ['강북구', '노원구'] },
+        '동대문구': { name: '동대문구', residence: 72, lwb: 68, jobs: 60, community: 72, park: 3, library: 15, culture: 18, movie: 5, gym: 11, price: 6.8, households: 24100, neighbors: ['중구', '성동구', '광진구', '중랑구', '성북구'] },
+        '동작구': { name: '동작구', residence: 82, lwb: 58, jobs: 52, community: 84, park: 4, library: 12, culture: 20, movie: 4, gym: 13, price: 9.1, households: 30173, neighbors: ['영등포구', '용산구', '관악구', '서초구'] },
+        '마포구': { name: '마포구', residence: 92, lwb: 75, jobs: 82, community: 90, park: 8, library: 16, culture: 98, movie: 10, gym: 18, price: 9.1, households: 37272, neighbors: ['서대문구', '용산구', '영등포구'] },
+        '서대문구': { name: '서대문구', residence: 74, lwb: 62, jobs: 55, community: 80, park: 5, library: 14, culture: 35, movie: 6, gym: 12, price: 6.9, households: 23100, neighbors: ['은평구', '종로구', '마포구', '중구'] },
+        '서초구': { name: '서초구', residence: 80, lwb: 85, jobs: 90, community: 70, park: 8, library: 28, culture: 98, movie: 12, gym: 15, price: 18.5, households: 33377, neighbors: ['용산구', '동작구', '관악구', '강남구'] },
+        '성동구': { name: '성동구', residence: 78, lwb: 70, jobs: 68, community: 76, park: 6, library: 15, culture: 63, movie: 5, gym: 11, price: 13.2, households: 22504, neighbors: ['중구', '광진구', '동대문구', '용산구', '강남구', '송파구'] },
+        '성북구': { name: '성북구', residence: 70, lwb: 55, jobs: 48, community: 72, park: 5, library: 18, culture: 82, movie: 5, gym: 12, price: 6.5, households: 25110, neighbors: ['종로구', '동대문구', '중랑구', '강북구', '노원구'] },
+        '송파구': { name: '송파구', residence: 88, lwb: 72, jobs: 80, community: 74, park: 12, library: 28, culture: 86, movie: 15, gym: 21, price: 12.3, households: 58928, neighbors: ['강남구', '강동구', '광진구'] },
+        '양천구': { name: '양천구', residence: 65, lwb: 50, jobs: 45, community: 55, park: 5, library: 15, culture: 18, movie: 6, gym: 11, price: 8.5, households: 25965, neighbors: ['강서구', '영등포구', '구로구'] },
+        '영등포구': { name: '영등포구', residence: 86, lwb: 88, jobs: 85, community: 85, park: 6, library: 18, culture: 61, movie: 11, gym: 15, price: 9.3, households: 37411, neighbors: ['마포구', '용산구', '양천구', '구로구', '동작구'] },
+        '용산구': { name: '용산구', residence: 62, lwb: 82, jobs: 75, community: 68, park: 5, library: 10, culture: 102, movie: 8, gym: 10, price: 16.5, households: 19182, neighbors: ['중구', '마포구', '서초구', '영등포구', '동작구'] },
+        '은평구': { name: '은평구', residence: 66, lwb: 48, jobs: 40, community: 62, park: 6, library: 14, culture: 22, movie: 5, gym: 11, price: 5.0, households: 31058, neighbors: ['종로구', '서대문구'] },
+        '종로구': { name: '종로구', residence: 50, lwb: 90, jobs: 88, community: 60, park: 8, library: 21, culture: 244, movie: 6, gym: 5, price: 8.1, households: 10830, neighbors: ['중구', '성북구', '서대문구', '은평구'] },
+        '중구': { name: '중구', residence: 52, lwb: 100, jobs: 95, community: 65, park: 5, library: 9, culture: 154, movie: 8, gym: 13, price: 9.2, households: 10830, neighbors: ['종로구', '용산구', '성동구', '동대문구'] },
+        '중랑구': { name: '중랑구', residence: 60, lwb: 46, jobs: 42, community: 60, park: 4, library: 10, culture: 14, movie: 4, gym: 9, price: 4.8, households: 25625, neighbors: ['동대문구', '광진구', '성북구', '노원구'] }
+    };
+
+    // 8대 라이프스타일 가중치 매핑 구조 (명세서 규격 완벽 반영)
+    // [거주 밀집, 직주근접, 일자리, 커뮤니티, 공원, 도서관, 문화공간, 영화관, 체육시설]
+    const PRESETS = [
+        [30, 100, 30, 20, 40, 40, 30, 30, 30], // 1. 출퇴근 최우선
+        [70, 10, 15, 80, 90, 80, 80, 60, 70],  // 2. 재택근무형
+        [20, 95, 80, 15, 20, 20, 20, 20, 20],  // 3. 야근러 직장인
+        [85, 25, 30, 100, 50, 40, 80, 90, 70], // 4. 사회생활 중심
+        [15, 20, 10, 40, 80, 90, 70, 30, 80],  // 5. 가성비 추구형
+        [50, 50, 50, 50, 50, 50, 50, 50, 50],  // 6. 균형 잡힌
+        [75, 40, 35, 90, 70, 70, 60, 60, 60],  // 7. 자취 초보
+        [25, 55, 100, 30, 40, 60, 60, 50, 60]  // 8. 커리어 집중형
+    ];
+
+    // 슬라이더 9개 설정 데이터
+    const SLIDERS_DATA = [
+        { id: 'residence', name: '🏠 30대 거주 밀집도', minText: '한적함', maxText: '초밀집' },
+        { id: 'lwb', name: '🚇 직주근접도', minText: '집중주거', maxText: '회사초인접' },
+        { id: 'jobs', name: '💼 일자리 접근성', minText: '배후지', maxText: '업무지구' },
+        { id: 'community', name: '🍻 30대 동년배 커뮤니티', minText: '다양함', maxText: '동년배쏠림' },
+        { id: 'park', name: '🌳 여가: 근린공원 선호', minText: '무관', maxText: '공세권필수' },
+        { id: 'library', name: '📚 여가: 공공도서관 선호', minText: '무관', maxText: '북세권필수' },
+        { id: 'culture', name: '갤러리/문화공간 선호', minText: '무관', maxText: '문화덕후' },
+        { id: 'movie', name: '🎬 여가: 영화관 접근성', minText: '무관', maxText: '시네마필수' },
+        { id: 'gym', name: '💪 여가: 체육/피트니스 시설', minText: '무관', maxText: '득근구역' }
+    ];
+
+    // 비교 자치구 A, B 기본값
+    let selectedDistrictA = '강서구';
+    let selectedDistrictB = '관악구';
+    // ----------------------------------------------------
+    // ECharts 서울 지도 초기화 및 바인딩
+    // ----------------------------------------------------
+    let mapChart = null;
+    let mapRegistered = false;
+
+    async function initEChartsMap() {
+        const chartDom = document.getElementById('map-chart');
+        if (!chartDom) return;
+        mapChart = echarts.init(chartDom);
+        
+        // ECharts 지도 크기 반응형 자동 보정
+        window.addEventListener('resize', () => {
+            if (mapChart) mapChart.resize();
+        });
+
+        try {
+            const geoRes = await fetch('https://raw.githubusercontent.com/southkorea/seoul-maps/master/kostat/2013/json/seoul_municipalities_geo_simple.json');
+            const geoJson = await geoRes.json();
+            echarts.registerMap('seoul', geoJson);
+            mapRegistered = true;
+            
+            // 지도 클릭 이벤트 바인딩 -> 기존 A/B 비교 선택 로직과 직결
+            mapChart.on('click', function (params) {
+                if (params.data && params.data.name) {
+                    selectForComparison(params.data.name);
+                }
+            });
+
+            updateDashboard();
+        } catch (err) {
+            console.error("서울 지도 GeoJSON 로드 실패:", err);
+        }
+    }
+
+    // ----------------------------------------------------
+    // App Initialization & Rendering
+    // ----------------------------------------------------
+    window.addEventListener('DOMContentLoaded', () => {
+        initSliders();
+        initOfficeDropdown();
+        initEChartsMap();
+        
+        // ⚖️ 균형 잡힌 프리셋 초기 자동 바인딩
+        document.querySelectorAll('.preset-btn')[5].classList.add('active');
+        applyPreset(5, document.querySelectorAll('.preset-btn')[5]);
+        
+        // 9대 Plotly 통합 차트 일괄 가동
+        renderPlotlyCharts();
+    });
+
+    // 가중치 슬라이더 동적 렌더링
+    function initSliders() {
+        const box = document.getElementById('sliders-box');
+        SLIDERS_DATA.forEach((s, idx) => {
+            const html = `
+                <div class="slider-row" id="slider-row-${s.id}">
+                    <div class="slider-header">
+                        <span class="slider-name">${s.name}</span>
+                        <span class="slider-badge badge-purple" id="slider-badge-${s.id}">보통 (5.0)</span>
+                    </div>
+                    <div class="slider-control">
+                        <span class="slider-side-text">${s.minText}</span>
+                        <input type="range" id="slider-${s.id}" min="0" max="100" value="50" oninput="onSliderChange('${s.id}', this.value)">
+                        <span class="slider-side-text">${s.maxText}</span>
+                    </div>
+                </div>
+            `;
+            box.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    // 직장구 드롭다운 바인딩
+    function initOfficeDropdown() {
+        const select = document.getElementById('office-select');
+        Object.keys(DISTRICT_DATA).sort().forEach(gu => {
+            select.insertAdjacentHTML('beforeend', `<option value="${gu}">${gu}</option>`);
+        });
+    }
+
+    // ----------------------------------------------------
+    // Event Handlers & Scoring Engine
+    // ----------------------------------------------------
+    
+    // 슬라이더 변경 감지 및 등급 태그 업데이트
+    function onSliderChange(id, value) {
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        updateSliderBadge(id, value);
+        updateDashboard();
+    }
+
+    function updateSliderBadge(id, value) {
+        const badge = document.getElementById(`slider-badge-${id}`);
+        let text = '';
+        let colorClass = '';
+
+        if (value <= 15) { text = '무관'; colorClass = 'badge-gray'; }
+        else if (value <= 35) { text = '낮음'; colorClass = 'badge-yellow'; }
+        else if (value <= 65) { text = '보통'; colorClass = 'badge-purple'; }
+        else if (value <= 85) { text = '높음'; colorClass = 'badge-blue'; }
+        else { text = '최우선'; colorClass = 'badge-green'; }
+
+        badge.textContent = `${text} (${(value/10).toFixed(1)})`;
+        badge.className = `slider-badge ${colorClass}`;
+    }
+
+    // 프리셋 바인딩 로직
+    function applyPreset(index, btn) {
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const weights = PRESETS[index];
+        SLIDERS_DATA.forEach((s, idx) => {
+            const input = document.getElementById(`slider-${s.id}`);
+            input.value = weights[idx];
+            updateSliderBadge(s.id, weights[idx]);
+        });
+
+        updateDashboard();
+    }
+
+    // 실시간 자치구 종합 스코어링 엔진 및 뷰 업데이트
+    function updateDashboard() {
+        const office = document.getElementById('office-select').value;
+        const weights = {};
+        
+        // 현재 가중치 수집
+        SLIDERS_DATA.forEach(s => {
+            weights[s.id] = parseInt(document.getElementById(`slider-${s.id}`).value) || 0;
+        });
+
+        // 25개 자치구 개별 채점 연산
+        const scoredDistricts = [];
+        
+        Object.keys(DISTRICT_DATA).forEach(key => {
+            const gu = DISTRICT_DATA[key];
+            let rawScore = 0;
+            let weightSum = 0;
+
+            // 1. 4대 핵심 지표 채점 (생활인구 등)
+            rawScore += gu.residence * weights['residence'];
+            rawScore += gu.lwb * weights['lwb'];
+            rawScore += gu.jobs * weights['jobs'];
+            rawScore += gu.community * weights['community'];
+            weightSum += weights['residence'] + weights['lwb'] + weights['jobs'] + weights['community'];
+
+            // 2. 5대 문화 SOC 인프라 채점 (공원, 도서관, 문화공간, 영화관, 체육시설)
+            // 총 시설 및 다양성에 인프라 개별 가중치 연동
+            rawScore += (gu.park * 8.3) * weights['park']; // 정규화 승수 결합
+            rawScore += (gu.library * 2.2) * weights['library'];
+            rawScore += (gu.culture * 0.4) * weights['culture'];
+            rawScore += (gu.movie * 0.8) * weights['movie'];
+            rawScore += (gu.gym * 4.7) * weights['gym'];
+            weightSum += weights['park'] + weights['library'] + weights['culture'] + weights['movie'] + weights['gym'];
+
+            // 3. 실거래가 예산 가성비 (주거비 부담 역산 점수 적용)
+            // 가격이 낮을수록 높은 가성비 점수를 줌
+            const priceEfficiency = Math.max(0, 100 - (gu.price * 4.5));
+            // 가성비 추구형 프리셋 혹은 체육시설 가중치가 있을 때 가성비 비중 부여
+            const priceWeight = weights['gym'] > 50 ? 50 : 20;
+            rawScore += priceEfficiency * priceWeight;
+            weightSum += priceWeight;
+
+            // 평균 계산
+            let finalScore = weightSum > 0 ? (rawScore / weightSum) : 50;
+
+            // 4. 직장 보너스 및 인근 버프 (+8점, +5점 보너스 결합)
+            if (office !== '') {
+                if (key === office) {
+                    finalScore += 8;
+                } else if (gu.neighbors.includes(office)) {
+                    finalScore += 5;
+                }
+            }
+
+            // 범위 크롭
+            finalScore = Math.min(100, Math.max(0, finalScore));
+
+            scoredDistricts.push({
+                name: key,
+                score: finalScore,
+                data: gu
+            });
+        });
+
+        // 랭킹 정렬
+        scoredDistricts.sort((a, b) => b.score - a.score);
+
+        // 랭킹 리스트 뷰 업데이트
+        const rankBox = document.getElementById('rank-box');
+        rankBox.innerHTML = '';
+        
+        scoredDistricts.forEach((item, idx) => {
+            const isSelected = item.name === selectedDistrictA || item.name === selectedDistrictB ? 'selected' : '';
+            const badge = idx < 3 ? `<span class="rank-badge">👑 추천</span>` : '';
+            const html = `
+                <div class="ranking-item ${isSelected}" onclick="onRankItemClick('${item.name}')">
+                    <span class="rank-num">${idx + 1}</span>
+                    <div class="rank-info">
+                        <div class="rank-name-row">
+                            <span class="rank-name">${item.name} ${badge}</span>
+                            <span class="rank-score">${item.score.toFixed(1)}점</span>
+                        </div>
+                        <div class="rank-bar-bg">
+                            <div class="rank-bar-fill" style="width: ${item.score}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            rankBox.insertAdjacentHTML('beforeend', html);
+        });
+
+        // ECharts 지도 색상 및 실시간 데이터 바인딩
+        if (mapChart && mapRegistered) {
+            const minScore = Math.min(...scoredDistricts.map(d => d.score));
+            const maxScore = Math.max(...scoredDistricts.map(d => d.score));
+            
+            mapChart.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(255,255,255,0.98)',
+                    padding: 16,
+                    borderRadius: 12,
+                    borderWidth: 0,
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(0,0,0,0.1)',
+                    textStyle: { color: '#1e293b', fontFamily: 'Pretendard, Noto Sans KR, sans-serif' },
+                    formatter: (p) => {
+                        if (!p.data) return p.name;
+                        const guName = p.data.name;
+                        const gu = DISTRICT_DATA[guName];
+                        const score = p.data.value;
+
+                        // 가계수지/실거래 경고 시스템 작동
+                        let budgetWarning = "합리적인 주택 시세 벨트입니다. 외식 지출 대체형 문화 공간을 즐기기에 아주 쾌적합니다.";
+                        if (gu.price >= 15.0) {
+                            budgetWarning = "⚠️ 주거비 경직도 극도로 주의! 자산 방어를 위해 공공 도서관 및 무료 SOC 인프라를 필수 활용해 개인 지출을 극단 다이어트 하십시오.";
+                        } else if (gu.price >= 9.0) {
+                            budgetWarning = "⚠️ 주거비 다소 경직! 외식비 대체 여가 혜택(공원 임장 등)을 통한 개인 재무 방어가 동반 추천됩니다.";
+                        }
+
+                        // 여가 시설 가중치 여부에 따른 하이라이트 체크
+                        const getHighlightStyle = (key) => weights[key] >= 65 ? 'background-color: var(--primary-light); color: var(--primary); border: 1px solid rgba(79, 70, 229, 0.3);' : 'background-color: var(--slate-light); color: var(--text-main);';
+
+                        return `
+                            <div style="font-family: 'Noto Sans KR', sans-serif; width: 280px; white-space: normal; word-break: break-all;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid var(--slate-light); padding-bottom: 8px; margin-bottom: 10px;">
+                                    <span style="font-size: 16px; font-weight: 800; color: #0f172a;">${guName}</span>
+                                    <span style="font-size: 12px; font-weight: 900; color: white; background: linear-gradient(135deg, var(--primary), #6366f1); padding: 3px 8px; border-radius: 99px;">${score.toFixed(1)}점</span>
+                                </div>
+                                <div style="margin-bottom: 10px; font-size: 12px;">
+                                    <div style="font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">📊 30대 핵심 고용/주거 매칭 지수</div>
+                                    <div style="display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 2px;"><span>직주근접 만족도:</span><strong>${gu.residence}점</strong></div>
+                                    <div style="display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 2px;"><span>일자리 접근성:</span><strong>${gu.jobs}점</strong></div>
+                                    <div style="display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 2px;"><span>30대 1인가구수:</span><strong>${(gu.households).toLocaleString()}가구</strong></div>
+                                </div>
+                                <div style="margin-bottom: 10px; font-size: 12px;">
+                                    <div style="font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">🌳 5대 문화·여가 인프라 시설 현황</div>
+                                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 4px;">
+                                        <div style="font-size: 10px; padding: 3px; border-radius: 4px; text-align: center; font-weight: 600; ${getHighlightStyle('park')}">공원 ${gu.park}</div>
+                                        <div style="font-size: 10px; padding: 3px; border-radius: 4px; text-align: center; font-weight: 600; ${getHighlightStyle('library')}">도서관 ${gu.library}</div>
+                                        <div style="font-size: 10px; padding: 3px; border-radius: 4px; text-align: center; font-weight: 600; ${getHighlightStyle('culture')}">문화 ${gu.culture}</div>
+                                        <div style="font-size: 10px; padding: 3px; border-radius: 4px; text-align: center; font-weight: 600; ${getHighlightStyle('movie')}">영화 ${gu.movie}</div>
+                                        <div style="font-size: 10px; padding: 3px; border-radius: 4px; text-align: center; font-weight: 600; ${getHighlightStyle('gym')}">체육 ${gu.gym}</div>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 10px; font-size: 12px;">
+                                    <div style="font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">💰 부동산 실거래가 지표</div>
+                                    <div style="display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 2px;"><span>평균 실거래 가격:</span><strong>약 ${(gu.price).toFixed(1)}억원</strong></div>
+                                </div>
+                                <div style="background-color: var(--warning-light); color: #78350f; border: 1px dashed #f59e0b; padding: 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; margin-top: 6px; white-space: normal; line-height: 1.4;">${budgetWarning}</div>
+                            </div>
+                        `;
+                    }
+                },
+                visualMap: {
+                    min: minScore,
+                    max: maxScore,
+                    inRange: { color: ['#eff6ff', '#3b82f6', '#1e3a8a'] },
+                    show: true,
+                    orient: 'horizontal',
+                    left: 20,
+                    bottom: 20,
+                    text: ['최적 입지', '합리적/보통'],
+                    textStyle: { color: '#475569', fontWeight: 'bold', fontSize: 10, fontFamily: 'Noto Sans KR, sans-serif' },
+                    calculable: true
+                },
+                series: [{
+                    type: 'map',
+                    map: 'seoul',
+                    label: {
+                        show: true,
+                        fontSize: 9,
+                        fontWeight: 'bold',
+                        color: '#1e293b',
+                        formatter: (p) => p.name.replace('구', '')
+                    },
+                    itemStyle: {
+                        borderColor: '#ffffff',
+                        borderWidth: 1.5
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            areaColor: '#dbeafe',
+                            borderColor: '#1e1b4b',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: true,
+                            color: '#1e3a8a',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    data: scoredDistricts.map(d => ({ name: d.name, value: d.score }))
+                }]
+            });
+        }
+
+        // 비교 도구 리프레시
+        updateComparison();
+    }
+
+
+
+    // 비교 자치구 A, B 선택 컨트롤
+    function selectForComparison(guName) {
+        if (selectedDistrictA === guName) return;
+        selectedDistrictB = selectedDistrictA;
+        selectedDistrictA = guName;
+        
+        updateDashboard();
+    }
+
+    function onRankItemClick(guName) {
+        selectForComparison(guName);
+    }
+
+    // ----------------------------------------------------
+    // 비교 판정 및 Plotly.js 레이더 차트 갱신
+    // ----------------------------------------------------
+    function updateComparison() {
+        const guA = DISTRICT_DATA[selectedDistrictA];
+        const guB = DISTRICT_DATA[selectedDistrictB];
+        
+        if (!guA || !guB) return;
+
+        // 실시간 가중치와 보너스가 반영된 세부 최종 점수 산출
+        const scoreA = calculateSingleGuScore(selectedDistrictA);
+        const scoreB = calculateSingleGuScore(selectedDistrictB);
+
+        const diff = Math.abs(scoreA - scoreB);
+        let winnerName = "";
+        let winDesc = "";
+        let gradientStyle = "linear-gradient(135deg, var(--primary), #312e81)";
+
+        if (scoreA >= scoreB) {
+            winnerName = `${selectedDistrictA} vs ${selectedDistrictB}`;
+            gradientStyle = "linear-gradient(135deg, var(--primary), #1e1b4b)";
+            
+            if (diff >= 10) {
+                winDesc = `👑 <strong>${selectedDistrictA}구</strong>가 확실하게 <strong>${diff.toFixed(1)}점</strong> 차이로 앞섭니다! 교통 요지망과 문화 5대 시설의 조화가 월등하여 30대 정주 여건으로 확실히 권장됩니다.`;
+            } else if (diff >= 5) {
+                winDesc = `👍 <strong>${selectedDistrictA}구</strong>가 다소 <strong>${diff.toFixed(1)}점</strong> 우세합니다. 직주근접과 가계 지출 대체 인프라 가치에서 조금 더 매력적인 타협점을 가집니다.`;
+            } else if (diff >= 2) {
+                winDesc = `😊 <strong>${selectedDistrictA}구</strong>가 약간 <strong>${diff.toFixed(1)}점</strong> 앞서고 있습니다. 큰 편차는 없으므로 본인의 실생활 동선과 예산 상한선을 한 번 더 체크하세요.`;
+            } else {
+                winDesc = `⚖️ 두 지역의 추천 선호가 <strong>${diff.toFixed(1)}점</strong> 차이로 거의 동일한 비슷한 수준입니다. 주택 유형(오피스텔 vs 빌라 등)과 치안 야간 임장을 통해 최종 결정을 내리십시오.`;
+            }
+        } else {
+            winnerName = `${selectedDistrictB} vs ${selectedDistrictA}`;
+            gradientStyle = "linear-gradient(135deg, var(--accent), #701a75)";
+            
+            if (diff >= 10) {
+                winDesc = `👑 <strong>${selectedDistrictB}구</strong>가 확실하게 <strong>${diff.toFixed(1)}점</strong> 차이로 우월합니다! 교통 요지망과 문화 5대 시설의 조화가 월등하여 30대 정주 여건으로 확실히 권장됩니다.`;
+            } else if (diff >= 5) {
+                winDesc = `👍 <strong>${selectedDistrictB}구</strong>가 다소 <strong>${diff.toFixed(1)}점</strong> 우세합니다. 직주근접과 가계 지출 대체 인프라 가치에서 조금 더 매력적인 타협점을 가집니다.`;
+            } else if (diff >= 2) {
+                winDesc = `😊 <strong>${selectedDistrictB}구</strong>가 약간 <strong>${diff.toFixed(1)}점</strong> 앞서고 있습니다. 큰 편차는 없으므로 본인의 실생활 동선과 예산 상한선을 한 번 더 체크하세요.`;
+            } else {
+                winDesc = `⚖️ 두 지역의 추천 선호가 <strong>${diff.toFixed(1)}점</strong> 차이로 거의 동일한 비슷한 수준입니다. 주택 유형(오피스텔 vs 빌라 등)과 치안 야간 임장을 통해 최종 결정을 내리십시오.`;
+            }
+        }
+
+        const winnerCard = document.getElementById('winner-card');
+        winnerCard.style.background = gradientStyle;
+        document.getElementById('winner-name').textContent = winnerName;
+        document.getElementById('winner-desc').innerHTML = winDesc;
+
+        // Plotly.js 비교 레이더 차트 드로잉
+        drawRadarPlot(selectedDistrictA, selectedDistrictB);
+    }
+
+    function calculateSingleGuScore(guName) {
+        const gu = DISTRICT_DATA[guName];
+        const weights = {};
+        SLIDERS_DATA.forEach(s => {
+            weights[s.id] = parseInt(document.getElementById(`slider-${s.id}`).value) || 0;
+        });
+        const office = document.getElementById('office-select').value;
+
+        let rawScore = 0; let weightSum = 0;
+        rawScore += gu.residence * weights['residence'] + gu.lwb * weights['lwb'] + gu.jobs * weights['jobs'] + gu.community * weights['community'];
+        weightSum += weights['residence'] + weights['lwb'] + weights['jobs'] + weights['community'];
+        rawScore += (gu.park * 8.3) * weights['park'] + (gu.library * 2.2) * weights['library'] + (gu.culture * 0.4) * weights['culture'] + (gu.movie * 0.8) * weights['movie'] + (gu.gym * 4.7) * weights['gym'];
+        weightSum += weights['park'] + weights['library'] + weights['culture'] + weights['movie'] + weights['gym'];
+        const priceEfficiency = Math.max(0, 100 - (gu.price * 4.5));
+        const priceWeight = weights['gym'] > 50 ? 50 : 20;
+        rawScore += priceEfficiency * priceWeight; weightSum += priceWeight;
+        
+        let score = weightSum > 0 ? (rawScore / weightSum) : 50;
+        if (office !== '') {
+            if (guName === office) score += 8;
+            else if (gu.neighbors.includes(office)) score += 5;
+        }
+        return Math.min(100, Math.max(0, score));
+    }
+
+    // Plotly 레이더 차트 그리기
+    function drawRadarPlot(guNameA, guNameB) {
+        const guA = DISTRICT_DATA[guNameA];
+        const guB = DISTRICT_DATA[guNameB];
+
+        const categories = ['거주 밀집', '직주 근접', '일자리', '커뮤니티', '공원 인프라', '도서관', '문화 공간', '영화관', '체육 시설'];
+        
+        // 각 지표 정규화 연산 수행 후 배열 조립
+        const dataA = [
+            guA.residence, guA.lwb, guA.jobs, guA.community,
+            Math.min(100, guA.park * 8.3), Math.min(100, guA.library * 2.2),
+            Math.min(100, guA.culture * 0.4), Math.min(100, guA.movie * 0.8),
+            Math.min(100, guA.gym * 4.7)
+        ];
+
+        const dataB = [
+            guB.residence, guB.lwb, guB.jobs, guB.community,
+            Math.min(100, guB.park * 8.3), Math.min(100, guB.library * 2.2),
+            Math.min(100, guB.culture * 0.4), Math.min(100, guB.movie * 0.8),
+            Math.min(100, guB.gym * 4.7)
+        ];
+
+        const traceA = {
+            type: 'scatterpolar',
+            r: [...dataA, dataA[0]],
+            theta: [...categories, categories[0]],
+            fill: 'toself',
+            name: guNameA,
+            fillcolor: 'rgba(79, 70, 229, 0.3)',
+            line: { color: 'rgba(79, 70, 229, 1)', width: 2 }
+        };
+
+        const traceB = {
+            type: 'scatterpolar',
+            r: [...dataB, dataB[0]],
+            theta: [...categories, categories[0]],
+            fill: 'toself',
+            name: guNameB,
+            fillcolor: 'rgba(219, 39, 119, 0.3)',
+            line: { color: 'rgba(219, 39, 119, 1)', width: 2 }
+        };
+
+        const layout = {
+            polar: {
+                radialaxis: { visible: true, range: [0, 100], gridcolor: '#cbd5e1' },
+                angularaxis: { gridcolor: '#cbd5e1' }
+            },
+            margin: { t: 25, b: 25, l: 35, r: 35 },
+            showlegend: true,
+            legend: { orientation: 'h', x: 0.5, y: -0.2, xanchor: 'center' },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
+        };
+
+        Plotly.newPlot('radar-plot', [traceA, traceB], layout, { responsive: true, displayModeBar: false });
+    }
+
+    // ----------------------------------------------------
+    // 통합 EDA 9대 인터랙티브 차트 렌더링 (Plotly.js)
+    // ----------------------------------------------------
+    function renderPlotlyCharts() {
+        const textMuted = '#64748b';
+        const colorPrimary = '#4f46e5';
+        const colorAccent = '#db2777';
+        const colorSuccess = '#059669';
+
+        // 1. 트리맵 (Treemap) — 자치구별 인구 규모
+        const values1 = [67.2, 50.4, 48.9, 45.5, 41.2, 38.8, 37.4, 37.2, 35.1, 33.3, 31.0, 30.1, 28.1, 25.9, 25.6, 25.1, 24.1, 23.1, 22.5, 22.1, 19.1, 17.2, 15.4, 14.7, 10.8];
+        const labels1 = ['송파구', '강서구', '강남구', '노원구', '관악구', '은평구', '영등포구', '마포구', '양천구', '서초구', '성북구', '동작구', '서대문구', '도봉구', '중랑구', '강북구', '동대문구', '광진구', '성동구', '구로구', '용산구', '금천구', '중구', '강동구', '종로구'];
+        const data1 = [{
+            type: "treemap",
+            labels: labels1,
+            parents: Array(labels1.length).fill("서울"),
+            values: values1,
+            textinfo: "label+value+percent parent",
+            marker: { colorscale: 'Blues', revertscale: true }
+        }];
+        Plotly.newPlot('plot-1', data1, { margin: { t: 0, b: 0, l: 0, r: 0 } }, { responsive: true, displayModeBar: false });
+
+        // 2. 인구 피라미드 (Population Pyramid) — 연령별 1인가구 남녀 분포
+        const ageLabels = ['20세미만', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65세이상'];
+        const malePop = [-5.2, -58.4, -135.4, -116.7, -72.0, -56.2, -44.8, -48.2, -43.1, -47.8, -125.6]; // 음수 처리
+        const femalePop = [6.3, 70.4, 146.4, 116.7, 69.3, 53.3, 41.4, 48.1, 48.0, 57.5, 215.1];
+        const data2 = [
+            { x: malePop, y: ageLabels, type: 'bar', orientation: 'h', name: '남성 1인가구', marker: { color: colorPrimary } },
+            { x: femalePop, y: ageLabels, type: 'bar', orientation: 'h', name: '여성 1인가구', marker: { color: colorAccent } }
+        ];
+        const layout2 = {
+            barmode: 'relative',
+            xaxis: { title: '가구 비율 (%) 및 수량', tickvals: [-200, -100, 0, 100, 200], ticktext: ['20만', '10만', '0', '10만', '20만'], gridcolor: '#f1f5f9' },
+            yaxis: { gridcolor: '#f1f5f9' },
+            margin: { t: 10, b: 40, l: 60, r: 10 },
+            legend: { orientation: 'h', x: 0.5, y: -0.15, xanchor: 'center' }
+        };
+        Plotly.newPlot('plot-2', data2, layout2, { responsive: true, displayModeBar: false });
+
+        // 3. 선버스트 (Sunburst) — 30대 1인가구 주거 형태 (비아파트 73%)
+        const data3 = [{
+            type: "sunburst",
+            labels: ["30대 1인가구", "비아파트 (73%)", "아파트 (21%)", "주택이외 (오피스텔)", "단독주택", "다세대주택", "연립주택"],
+            parents: ["", "30대 1인가구", "30대 1인가구", "비아파트 (73%)", "비아파트 (73%)", "비아파트 (73%)", "비아파트 (73%)"],
+            values: [393500, 287255, 106245, 140086, 120017, 46039, 5508],
+            branchvalues: "total",
+            marker: { colors: ['#4f46e5', '#db2777', '#d97706', '#f472b6', '#38bdf8', '#818cf8', '#cbd5e1'] }
+        }];
+        Plotly.newPlot('plot-3', data3, { margin: { t: 0, b: 0, l: 0, r: 0 } }, { responsive: true, displayModeBar: false });
+
+        // 4. 레이더 차트 — 연령대별 주거 형태 비교
+        const categories = ['단독주택', '아파트', '다세대주택', '연립주택', '오피스텔 등'];
+        const data4 = [
+            { type: 'scatterpolar', r: [40, 10, 15, 2, 33, 40], theta: [...categories, categories[0]], name: '20대', line: { color: '#94a3b8' } },
+            { type: 'scatterpolar', r: [30.5, 20.8, 11.7, 1.4, 35.6, 30.5], theta: [...categories, categories[0]], fill: 'toself', name: '30대', line: { color: colorPrimary } },
+            { type: 'scatterpolar', r: [25, 35, 12, 3, 25, 25], theta: [...categories, categories[0]], name: '40대', line: { color: colorAccent } }
+        ];
+        const layout4 = {
+            polar: { radialaxis: { visible: true, range: [0, 50], gridcolor: '#f1f5f9' } },
+            margin: { t: 20, b: 20, l: 30, r: 30 },
+            legend: { orientation: 'h', x: 0.5, y: -0.15, xanchor: 'center' }
+        };
+        Plotly.newPlot('plot-4', data4, layout4, { responsive: true, displayModeBar: false });
+
+        // 5. 시간대별 히트맵 — 자치구별 30대 생활인구 추이
+        const times = ['00시', '04시', '08시', '12시', '16시', '20시', '23시'];
+        const gus = ['강남구', '관악구', '마포구', '중구', '영등포구', '노원구'];
+        const zData = [
+            [80, 75, 95, 120, 130, 95, 85],  // 강남 (주간 폭발)
+            [120, 130, 90, 60, 65, 110, 125], // 관악 (야간 컴백)
+            [85, 80, 90, 110, 115, 100, 90],  // 마포 (비교적 플랫)
+            [40, 35, 85, 140, 145, 75, 45],   // 중구 (극단적 주주야소)
+            [75, 70, 95, 115, 120, 90, 80],   // 영등포
+            [110, 115, 85, 65, 70, 100, 112]   // 노원
+        ];
+        const data5 = [{
+            x: times,
+            y: gus,
+            z: zData,
+            type: 'heatmap',
+            colorscale: 'YlGnBu'
+        }];
+        const layout5 = {
+            margin: { t: 10, b: 40, l: 60, r: 10 }
+        };
+        Plotly.newPlot('plot-5', data5, layout5, { responsive: true, displayModeBar: false });
+
+        // 6. 주야간 대비 바 차트
+        const gus6 = ['강남구', '중구', '영등포구', '관악구', '강서구', '노원구'];
+        const dayPop = [186.5, 92.3, 112.5, 48.2, 58.1, 40.5];
+        const nightPop = [90.2, 38.1, 62.5, 100.8, 95.6, 85.0];
+        const data6 = [
+            { x: gus6, y: dayPop, type: 'bar', name: '30대 주간(일터) 생활인구', marker: { color: colorPrimary } },
+            { x: gus6, y: nightPop, type: 'bar', name: '30대 야간(주거) 생활인구', marker: { color: colorAccent } }
+        ];
+        const layout6 = {
+            xaxis: { gridcolor: '#f1f5f9' },
+            yaxis: { title: '지수 점수 (정규화)', gridcolor: '#f1f5f9' },
+            margin: { t: 20, b: 40, l: 50, r: 10 },
+            legend: { orientation: 'h', x: 0.5, y: -0.15, xanchor: 'center' }
+        };
+        Plotly.newPlot('plot-6', data6, layout6, { responsive: true, displayModeBar: false });
+
+        // 7. 수평 막대차트 — 서울 주요 산업 종사자 Top 8
+        const industries = ['도소매업', '정보통신업', '전문,과학기술', '금융,보험업', '제조업', '건설업', '숙박,음식점', '교육서비스'];
+        const counts = [936536, 490271, 630526, 299964, 237097, 388553, 450505, 366094];
+        const data7 = [{
+            x: counts,
+            y: industries,
+            type: 'bar',
+            orientation: 'h',
+            marker: { color: '#0ea5e9' }
+        }];
+        const layout7 = {
+            xaxis: { title: '종사자 수 (명)', gridcolor: '#f1f5f9' },
+            yaxis: { gridcolor: '#f1f5f9' },
+            margin: { t: 10, b: 40, l: 110, r: 10 }
+        };
+        Plotly.newPlot('plot-7', data7, layout7, { responsive: true, displayModeBar: false });
+
+        // 8. 생키 다이어그램 — 서울 1인가구 유입 흐름
+        const data8 = [{
+            type: "sankey",
+            orientation: "h",
+            node: {
+                pad: 15,
+                thickness: 30,
+                line: { color: "black", width: 0.5 },
+                label: ["경기도 유입", "인천광역시", "기타 지방", "서울 서부권", "서울 남부권", "서울 동부권"],
+                color: ["#cbd5e1", "#e2e8f0", "#94a3b8", colorPrimary, colorAccent, colorSuccess]
+            },
+            link: {
+                source: [0, 0, 0, 1, 1, 2, 2],
+                target: [3, 4, 5, 3, 4, 3, 5],
+                value: [62000, 48000, 32000, 15000, 8000, 20000, 18000]
+            }
+        }];
+        Plotly.newPlot('plot-8', data8, { margin: { t: 10, b: 10, l: 10, r: 10 } }, { responsive: true, displayModeBar: false });
+
+        // 9. 가계수지 항목별 편차 차트 — 도시 vs 전국 1인가구 지출
+        const items = ['음식·숙박(외식)', '주거·광열(주거비)', '교통비', '식료품', '오락·문화', '기타 소비'];
+        const urbanSpend = [42.8, 35.1, 22.4, 18.5, 14.2, 45.2];
+        const nationalSpend = [35.2, 29.5, 21.0, 17.2, 11.5, 40.5];
+        const data9 = [
+            { x: items, y: urbanSpend, type: 'bar', name: '서울/도시 1인가구 지출 (만원)', marker: { color: colorAccent } },
+            { x: items, y: nationalSpend, type: 'bar', name: '전국 1인가구 평균 지출 (만원)', marker: { color: '#cbd5e1' } }
+        ];
+        const layout9 = {
+            xaxis: { gridcolor: '#f1f5f9' },
+            yaxis: { title: '월 지출액 (만원)', gridcolor: '#f1f5f9' },
+            margin: { t: 20, b: 40, l: 50, r: 10 },
+            legend: { orientation: 'h', x: 0.5, y: -0.15, xanchor: 'center' }
+        };
+        Plotly.newPlot('plot-9', data9, layout9, { responsive: true, displayModeBar: false });
+    }
+</script>
+
+</body>
+</html>
