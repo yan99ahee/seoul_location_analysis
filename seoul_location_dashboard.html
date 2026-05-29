@@ -226,7 +226,7 @@
             display: flex;
             flex-direction: column;
             gap: 14px;
-            max-height: 480px;
+            max-height: 400px;
             overflow-y: auto;
             padding-right: 6px;
         }
@@ -333,7 +333,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 600px;
+            min-height: 750px;
             position: relative;
         }
 
@@ -341,7 +341,7 @@
         #map-chart {
             width: 100%;
             height: 100%;
-            min-height: 600px;
+            min-height: 640px;
         }
 
         /* 프리미엄 카드형 툴팁 */
@@ -540,7 +540,7 @@
         /* 2열 랭킹 레이아웃 및 Top 3 추천 카드 스타일 */
         .ranking-container {
             display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
+            grid-template-columns: 0.8fr 1.2fr;
             gap: 24px;
         }
 
@@ -652,7 +652,7 @@
 
         .compare-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 0.7fr 1.3fr;
             gap: 24px;
         }
 
@@ -665,7 +665,7 @@
         .compare-card {
             background: linear-gradient(135deg, #4f46e5, #312e81);
             color: white;
-            padding: 24px;
+            padding: 16px 20px;
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
             display: flex;
@@ -676,6 +676,7 @@
             min-height: 240px;
             position: relative;
             overflow: hidden;
+            box-sizing: border-box;
         }
 
         .compare-card.accent {
@@ -692,17 +693,17 @@
         }
 
         .compare-card-winner {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 900;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             text-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
         .compare-card-desc {
-            font-size: 15px;
-            font-weight: 300;
+            font-size: 13.5px;
+            font-weight: 400;
             line-height: 1.5;
-            max-width: 480px;
+            max-width: 100%;
             opacity: 0.95;
         }
 
@@ -809,6 +810,7 @@
             font-size: 12px;
             color: var(--slate);
             font-weight: 500;
+            margin-top: auto; /* 남는 세로 공간을 밀어내어 가로 차트 쌍 간의 하단 라인 수평 맞춤 */
         }
 
         /* ----------------------------------------------------
@@ -1017,7 +1019,7 @@
             <h1>서울 30대 주거 입지 Navigator</h1>
             <p>인구·고용·매출·실거래가 및 문화 SOC 3대 심층 분석 데이터셋 연계 지능형 대시보드</p>
             <div style="font-size: 11px; opacity: 0.85; margin-top: 6px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                <span>📊 <strong>분석 근거 기준:</strong> 통계청 가계동향조사(2024), 국토교통부 실거래가(2024), 서울시 생활인구·사업체조사·문화SOC 데이터</span>
+                <span>📊 <strong>분석 근거 기준:</strong> 통계청 가계동향조사(2024), 국토교통부 실거래가(2024), 서울시 생활인구·사업체조사·문화SOC 데이터 (모두 2024년 기준)</span>
                 <span class="info-trigger" onclick="toggleDataSpecsModal(true)" style="text-decoration: underline; cursor: pointer; color: #a5b4fc; font-weight: 700;">[상세 출처/근거 보기]</span>
             </div>
         </div>
@@ -1102,7 +1104,7 @@
             </div>
 
             <!-- 3순위 기준 : 9대 미세 가중치 슬라이더 (0~10점) -->
-            <div class="control-group" style="flex-grow: 1;">
+            <div class="control-group">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <label class="control-label" id="label-slider" style="margin-bottom: 0;">🎚️ <strong>3순위 기준</strong> : 9대 미세 가중치 슬라이더 (0~10점)</label>
                     <select id="rank-slider" onchange="adjustRanks('slider')" style="width: 75px; padding: 4px 8px; font-size: 12px; font-weight: 700; border-radius: 6px; border: 1.5px solid var(--primary); outline: none; background-color: var(--primary-light); color: var(--primary); cursor: pointer;">
@@ -1145,8 +1147,8 @@
             <div class="bento-card map-card" style="margin-bottom: 0;">
                 <div class="card-title">🗺️ 서울시 25개 자치구 추천 히트맵</div>
                 
-                <div class="map-container" style="padding: 0; min-height: 600px; display: block; position: relative;">
-                    <div id="map-chart" style="width: 100%; height: 600px;"></div>
+                <div class="map-container" style="padding: 0; min-height: 640px; display: block; position: relative;">
+                    <div id="map-chart" style="width: 100%; height: 640px;"></div>
                 </div>
             </div>
 
@@ -1177,7 +1179,7 @@
                         <div style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
                             📋 전체 자치구 순위 (클릭 시 하단 비교 도구 연동)
                         </div>
-                        <div class="ranking-list" id="rank-box" style="max-height: 480px;">
+                        <div class="ranking-list" id="rank-box" style="max-height: 320px;">
                             <!-- 자치구 정렬 랭킹 동적 생성 -->
                         </div>
                     </div>
@@ -1186,7 +1188,7 @@
                         <div style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
                             ✨ Top 3 추천 자치구 입지 분석 근거
                         </div>
-                        <div id="top3-reason-box" style="display: flex; flex-direction: column; gap: 12px; max-height: 480px; overflow-y: auto; padding-right: 4px;">
+                        <div id="top3-reason-box" style="display: flex; flex-direction: column; gap: 12px; max-height: 320px; overflow-y: auto; padding-right: 4px;">
                             <!-- 1~3위 추천 사유 및 근거가 프리미엄 카드로 동적 생성됨 -->
                         </div>
                     </div>
@@ -1204,19 +1206,23 @@
         <div class="card-title" style="border: none; margin-bottom: 12px; padding: 0;">⚖️ 자치구 정밀 비교 및 추천 판정 도구 (Ranking Click)</div>
         <div class="compare-grid">
             <!-- 그라디언트 승자 판정 카드 -->
-            <div class="compare-card" id="winner-card">
+            <div class="compare-card" id="winner-card" style="align-self: stretch;">
                 <div class="compare-card-title">AI 종합 추천 판정</div>
                 <div class="compare-card-winner" id="winner-name">강서구 VS 관악구</div>
                 <div class="compare-card-desc" id="winner-desc">우측 순위표에서 원하시는 자치구를 클릭하시면 즉시 대조 판정 및 Plotly.js 9차원 분석 비교 레이더 차트가 이곳에 시각화됩니다!</div>
             </div>
             <!-- 다차원 비교 레이더 차트 -->
-            <div class="chart-card" style="padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <div class="chart-card-title" style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">9차원 주거 및 인프라 실시간 매칭 차트 (Plotly.js)</div>
-                    <div id="radar-plot" style="width: 100%; height: 380px;"></div>
-                </div>
-                <div id="radar-description" style="margin-top: 12px; padding: 12px; background-color: var(--slate-light); border-radius: var(--radius-md); border-left: 4px solid var(--primary); font-size: 11.5px; line-height: 1.6; color: var(--text-main); text-align: left;">
-                    💡 우측 순위표에서 비교할 자치구를 클릭해 주세요. 9차원 상세 입지 및 정주 인프라 정밀 대조 근거가 이곳에 실시간 요약 표기됩니다.
+            <div class="chart-card" style="padding: 20px; display: flex; flex-direction: column; height: 100%; box-sizing: border-box; justify-content: flex-start; align-self: stretch;">
+                <div class="chart-card-title" style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">9차원 주거 및 인프라 실시간 매칭 차트 (Plotly.js)</div>
+                <div style="display: flex; gap: 24px; flex-grow: 1; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                    <!-- [왼쪽]: Plotly.js 차트 -->
+                    <div style="flex: 1.1; min-width: 320px;">
+                        <div id="radar-plot" style="width: 100%; height: 320px;"></div>
+                    </div>
+                    <!-- [오른쪽]: 9대 정주 인프라 정밀 대조 근거 설명 박스 -->
+                    <div id="radar-description" style="flex: 0.9; min-width: 280px; padding: 16px; background-color: var(--slate-light); border-radius: var(--radius-md); border-left: 4px solid var(--primary); font-size: 11.5px; line-height: 1.6; color: var(--text-main); text-align: left; height: fit-content; max-height: 320px; overflow-y: auto; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">
+                        💡 우측 순위표에서 비교할 자치구를 클릭해 주세요. 9차원 상세 입지 및 정주 인프라 정밀 대조 근거가 이곳에 실시간 요약 표기됩니다.
+                    </div>
                 </div>
             </div>
         </div>
@@ -1734,7 +1740,7 @@
     <div class="compare-section" style="background-color: var(--bg-card); margin-bottom: 24px;">
         <div class="card-title" style="border: none; margin-bottom: 16px; padding: 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
             <span style="display: flex; align-items: center; gap: 8px;">📊 대시보드 데이터 수집 출처 및 종합 스코어링 산출 근거</span>
-            <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">최종 업데이트: 2026년 5월 최신 지표 반영</span>
+            <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">데이터 기준: 2024년 연간 데이터</span>
         </div>
         <div class="data-spec-grid" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px;">
             <div style="overflow-x: auto;">
@@ -1750,7 +1756,7 @@
                         <tr style="border-bottom: 1px solid var(--slate-light);">
                             <td style="padding: 10px 6px; font-weight: 700; color: var(--primary);">🏠 30대 거주 밀집도</td>
                             <td style="padding: 10px 6px;">서울시 열린데이터광장 (야간 00~05시 30대 평균 생활인구)</td>
-                            <td style="padding: 10px 6px;">2024~2025년 월간 평균</td>
+                            <td style="padding: 10px 6px;">2024년 월간 평균</td>
                         </tr>
                         <tr style="border-bottom: 1px solid var(--slate-light);">
                             <td style="padding: 10px 6px; font-weight: 700; color: var(--warning);">🚇 직주근접도</td>
@@ -1765,7 +1771,7 @@
                         <tr style="border-bottom: 1px solid var(--slate-light);">
                             <td style="padding: 10px 6px; font-weight: 700; color: var(--accent);">🍻 30대 커뮤니티</td>
                             <td style="padding: 10px 6px;">행정안전부 주민등록인구 및 30대 야간인구 / 야간 전체인구 비율</td>
-                            <td style="padding: 10px 6px;">2025~2026년 기준 정규화</td>
+                            <td style="padding: 10px 6px;">2024년 기준 정규화</td>
                         </tr>
                         <tr style="border-bottom: 1px solid var(--slate-light);">
                             <td style="padding: 10px 6px; font-weight: 700; color: var(--text-main);">🎭 5대 여가 인프라</td>
@@ -2564,10 +2570,13 @@
                 series: [{
                     type: 'map',
                     map: 'seoul',
+                    layoutCenter: ['50%', '50%'],
+                    layoutSize: '103%',
                     label: {
                         show: true,
-                        fontSize: 9,
+                        fontSize: 10,
                         fontWeight: 'bold',
+                        fontFamily: 'Noto Sans KR, sans-serif',
                         formatter: (p) => p.name
                     },
                     itemStyle: {
@@ -2583,17 +2592,26 @@
                         label: {
                             show: true,
                             color: '#1e3a8a',
-                            fontWeight: 'bold'
+                            fontWeight: 'bold',
+                            fontSize: 12
                         }
                     },
                     data: scoredDistricts.map(d => {
                         const isWhiteText = d.score >= 40;
+                        // 특정 자치구 라벨 위치 미세 보정 (offset: [x, y])
+                        const labelOffsets = {
+                            '종로구': [-12, 0],
+                            '성북구': [0, 10],
+                            '양천구': [0, 10]
+                        };
+                        const offset = labelOffsets[d.name] || [0, 0];
                         return {
                             name: d.name,
                             value: d.score,
                             label: {
                                 show: true,
-                                color: isWhiteText ? '#ffffff' : '#1e293b'
+                                color: isWhiteText ? '#ffffff' : '#1e293b',
+                                offset: offset
                             }
                         };
                     })
@@ -2852,9 +2870,9 @@
                 angularaxis: { gridcolor: '#cbd5e1', tickfont: { size: 10, fontWeight: 'bold' } }
             },
             margin: { t: 30, b: 30, l: 50, r: 50 },
-            height: 380,
+            height: 320,
             showlegend: true,
-            legend: { orientation: 'h', x: 0.5, y: -0.15, xanchor: 'center', font: { size: 10 } },
+            legend: { orientation: 'h', x: 0.5, y: -0.1, xanchor: 'center', font: { size: 10 } },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)'
         };
@@ -2951,10 +2969,15 @@
         ];
         const layout2 = {
             barmode: 'relative',
-            xaxis: { title: '가구 비율 (%) 및 수량', tickvals: [-200, -100, 0, 100, 200], ticktext: ['20만', '10만', '0', '10만', '20만'], gridcolor: '#f1f5f9' },
+            xaxis: { 
+                title: { text: '가구 비율 (%) 및 수량', standoff: 15 }, 
+                tickvals: [-200, -100, 0, 100, 200], 
+                ticktext: ['20만', '10만', '0', '10만', '20만'], 
+                gridcolor: '#f1f5f9' 
+            },
             yaxis: { gridcolor: '#f1f5f9' },
-            margin: { t: 10, b: 40, l: 60, r: 10 },
-            legend: { orientation: 'h', x: 0.5, y: -0.15, xanchor: 'center' }
+            margin: { t: 10, b: 70, l: 60, r: 10 },
+            legend: { orientation: 'h', x: 0.5, y: -0.24, xanchor: 'center' }
         };
         Plotly.newPlot('plot-2', data2, layout2, { responsive: true, displayModeBar: false });
 
@@ -3101,7 +3124,7 @@
         <div class="modal-body">
             <div class="modal-section">
                 <div class="modal-section-title">1. 데이터 수집 기준 및 처리 프로세스</div>
-                <p>본 대시보드는 2024년부터 2026년까지의 서울시 공공 데이터, 행정안전부 주민등록 통계, 국토교통부 실거래 정보 등을 수집하여 개발되었습니다. 모든 로우(Raw) 데이터는 정교한 전처리 과정을 거쳐 자치구별 통계 지표로 가공되었으며, 분석의 왜곡을 방지하기 위해 0~100점 범위로 정규화(Min-Max Scaling)를 거쳐 대시보드 엔진에 탑재되었습니다.</p>
+                <p>본 대시보드는 2024년 기준의 서울시 공공 데이터, 행정안전부 주민등록 통계, 국토교통부 실거래 정보 등을 수집하여 개발되었습니다. 모든 로우(Raw) 데이터는 정교한 전처리 과정을 거쳐 자치구별 통계 지표로 가공되었으며, 분석의 왜곡을 방지하기 위해 0~100점 범위로 정규화(Min-Max Scaling)를 거쳐 대시보드 엔진에 탑재되었습니다.</p>
             </div>
             
             <div class="modal-section">
