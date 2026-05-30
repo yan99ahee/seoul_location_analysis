@@ -439,7 +439,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-height: 520px;
+            max-height: 500px;
             overflow-y: auto;
             padding-right: 6px;
         }
@@ -1005,6 +1005,177 @@
             padding-left: 8px;
             margin-bottom: 10px;
         }
+
+        /* 예산 설계 탭 버튼 스타일 */
+        .budget-type-btn {
+            background-color: transparent;
+            color: var(--slate);
+            border: none;
+            padding: 8px;
+            font-size: 12.5px;
+            font-weight: 800;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .budget-type-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+        .budget-type-btn:hover:not(.active) {
+            background-color: rgba(226, 232, 240, 0.5);
+            color: var(--text-main);
+        }
+
+        /* 듀얼 레인지 슬라이더 (Dual Range Slider) 프리미엄 스타일 (순정 인디고 블루 톤앤매너 매핑) */
+        .dual-slider-wrapper {
+            position: relative;
+            width: 100%;
+            height: 24px;
+            margin-top: 8px;
+        }
+
+        .dual-slider-track {
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background-color: #cbd5e1; /* 연한 그레이 트랙 */
+            border-radius: 99px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .dual-slider-range {
+            position: absolute;
+            height: 6px;
+            background-color: var(--primary); /* 인디고 블루 테마 */
+            border-radius: 99px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .dual-slider-wrapper input[type="range"] {
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background: none;
+            pointer-events: none;
+            -webkit-appearance: none;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0;
+            z-index: 3;
+        }
+
+        .dual-slider-wrapper input[type="range"]::-webkit-slider-thumb {
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background-color: var(--primary); /* 인디고 블루 */
+            border: 2.5px solid #ffffff;
+            cursor: pointer;
+            pointer-events: auto;
+            -webkit-appearance: none;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.15s ease;
+        }
+
+        .dual-slider-wrapper input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            background-color: #312e81; /* 마우스 호버 시 짙은 퍼플 */
+        }
+
+        /* 주택 형태 카드형 다중 토글 UI 스타일 (라이트모드 최적화 및 텍스트 시인성 확보) */
+        .housing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .housing-card {
+            background-color: #ffffff; /* 순정 흰색 배경 */
+            border: 1.5px solid #cbd5e1; /* 연한 보더 */
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted); /* 평소 그레이 텍스트 */
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        .housing-card:hover {
+            border-color: var(--primary);
+            color: var(--text-main);
+        }
+
+        .housing-card.active {
+            background-color: var(--primary-light); /* 라벤더 블루 배경 */
+            border-color: var(--primary); /* 인디고 블루 보더 */
+            color: var(--primary); /* 인디고 블루 텍스트 */
+        }
+
+        .housing-card .check-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1.5px solid #cbd5e1;
+            font-size: 10px;
+            color: transparent;
+            transition: var(--transition);
+        }
+
+        .housing-card.active .check-icon {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: #ffffff; /* 체크마크는 흰색 */
+        }
+
+        /* 거래 형태 탭 버튼 프리미엄 네이비/슬레이트 스타일 (라이트 모드 최적화) */
+        .budget-tab-container {
+            display: flex;
+            gap: 6px;
+            background-color: var(--slate-light); /* 순정 연그레이 배경 */
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .budget-tab-btn {
+            flex: 1;
+            background-color: transparent;
+            color: var(--slate);
+            border: none;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-weight: 800;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .budget-tab-btn.active {
+            background-color: var(--primary); /* 인디고 블루 배경 */
+            color: #ffffff; /* 흰색 글자 */
+            box-shadow: var(--shadow-sm);
+        }
+
+        .budget-tab-btn:hover:not(.active) {
+            background-color: rgba(226, 232, 240, 0.8);
+            color: var(--text-main);
+        }
     </style>
 </head>
 <body>
@@ -1032,28 +1203,79 @@
     <div class="bento-grid">
 
         <!-- Bento Card 1: Left Panel (Interactive Filters & Preset Cards) -->
-        <div class="bento-card" style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="bento-card" style="display: flex; flex-direction: column; gap: 20px; align-self: start;">
             <div class="card-title">🔍 나의 입지 매칭 조작계</div>
             
-            <!-- 1순위 기준 : 나의 부동산 예산 -->
-            <div class="control-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <label class="control-label" id="label-budget" style="margin-bottom: 0;">💰 <strong>1순위 기준</strong> : 나의 부동산 예산 한도</label>
+            <!-- 1순위 기준 : 부동산 맞춤 예산 설계 (개편) -->
+            <div class="control-group" style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label class="control-label" id="label-budget" style="margin-bottom: 0;">💰 <strong>1순위 기준</strong> : 부동산 맞춤 예산 설계</label>
                     <select id="rank-budget" onchange="adjustRanks('budget')" style="width: 75px; padding: 4px 8px; font-size: 12px; font-weight: 700; border-radius: 6px; border: 1.5px solid var(--primary); outline: none; background-color: var(--primary-light); color: var(--primary); cursor: pointer;">
                         <option value="1" selected>1순위</option>
                         <option value="2">2순위</option>
                         <option value="3">3순위</option>
                     </select>
                 </div>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <select id="budget-billion-select" onchange="updateDashboard()" style="flex: 1; padding: 10px;">
-                        <!-- 0억 ~ 20억 동적 바인딩 -->
-                    </select>
-                    <span style="font-size: 13px; font-weight: 700; color: var(--slate); white-space: nowrap;">억</span>
-                    <select id="budget-million-select" onchange="updateDashboard()" style="flex: 1.2; padding: 10px;">
-                        <!-- 0 ~ 9000만원 동적 바인딩 -->
-                    </select>
-                    <span style="font-size: 13px; font-weight: 700; color: var(--slate); white-space: nowrap;">만원</span>
+                
+                <!-- 거래 유형 선택 버튼 탭 그룹 (네이비/에메랄드 탭으로 개편) -->
+                <div class="budget-tab-container">
+                    <button class="budget-tab-btn active" onclick="setBudgetType('maemae', this)">매매</button>
+                    <button class="budget-tab-btn" onclick="setBudgetType('jeonse', this)">전세</button>
+                    <button class="budget-tab-btn" onclick="setBudgetType('wolse', this)">월세</button>
+                </div>
+                
+                <!-- 예산 한도 듀얼 슬라이더 (Dual Range Slider로 개편!) -->
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <!-- 보증금 / 매매가 듀얼 슬라이더 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">
+                            <span id="deposit-slider-label">보증금 범위</span>
+                            <span id="deposit-value-text" style="color: var(--primary); font-weight: 800;">500만 ~ 3.5억원</span>
+                        </div>
+                        <div class="dual-slider-wrapper">
+                            <div class="dual-slider-track" id="deposit-track"></div>
+                            <div class="dual-slider-range" id="deposit-range-bar"></div>
+                            <input type="range" id="budget-deposit-min" min="500" max="150000" step="500" value="500" oninput="onDepositSliderInput()">
+                            <input type="range" id="budget-deposit-max" min="500" max="150000" step="500" value="35000" oninput="onDepositSliderInput()">
+                        </div>
+                    </div>
+                    
+                    <!-- 월세 범위 듀얼 슬라이더 (월세 모드일 때만 block 처리) -->
+                    <div id="rent-slider-container" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">
+                            <span>월세 범위</span>
+                            <span id="rent-value-text" style="color: var(--accent); font-weight: 800;">30만 ~ 85만원</span>
+                        </div>
+                        <div class="dual-slider-wrapper">
+                            <div class="dual-slider-track" id="rent-track"></div>
+                            <div class="dual-slider-range" id="rent-range-bar"></div>
+                            <input type="range" id="budget-rent-min" min="0" max="250" step="5" value="30" oninput="onRentSliderInput()">
+                            <input type="range" id="budget-rent-max" min="0" max="250" step="5" value="85" oninput="onRentSliderInput()">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 주택 유형 카드 토글 형태로 전면 리팩토링 (체크박스 숨김, 클릭 시 active 클래스 핸들링) -->
+                <div style="border-top: 1px dashed #334155; padding-top: 12px; display: flex; flex-direction: column; gap: 6px;">
+                    <span style="font-size: 12.5px; font-weight: 800; color: #94a3b8;">주택 형태 (중복 가능)</span>
+                    <div class="housing-grid">
+                        <div class="housing-card active" id="card-apt" onclick="toggleHousingCard('apt')">
+                            <span class="check-icon">✓</span>
+                            <span>아파트</span>
+                        </div>
+                        <div class="housing-card active" id="card-officetel" onclick="toggleHousingCard('officetel')">
+                            <span class="check-icon">✓</span>
+                            <span>오피스텔</span>
+                        </div>
+                        <div class="housing-card active" id="card-house" onclick="toggleHousingCard('house')">
+                            <span class="check-icon">✓</span>
+                            <span>단독/다가구</span>
+                        </div>
+                        <div class="housing-card active" id="card-villa" onclick="toggleHousingCard('villa')">
+                            <span class="check-icon">✓</span>
+                            <span>연립/다세대</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1179,7 +1401,7 @@
                         <div style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
                             📋 전체 자치구 순위 (클릭 시 하단 비교 도구 연동)
                         </div>
-                        <div class="ranking-list" id="rank-box" style="max-height: 320px;">
+                        <div class="ranking-list" id="rank-box" style="max-height: 480px;">
                             <!-- 자치구 정렬 랭킹 동적 생성 -->
                         </div>
                     </div>
@@ -1188,7 +1410,7 @@
                         <div style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
                             ✨ Top 3 추천 자치구 입지 분석 근거
                         </div>
-                        <div id="top3-reason-box" style="display: flex; flex-direction: column; gap: 12px; max-height: 320px; overflow-y: auto; padding-right: 4px;">
+                        <div id="top3-reason-box" style="display: flex; flex-direction: column; gap: 12px; max-height: 480px; overflow-y: auto; padding-right: 4px;">
                             <!-- 1~3위 추천 사유 및 근거가 프리미엄 카드로 동적 생성됨 -->
                         </div>
                     </div>
@@ -2162,16 +2384,79 @@
         updateRankLabels(); // 최초 순위 레이블 바인딩
         initSliders();
         initOfficeDropdown();
-        initBudgetDropdown();
         initEChartsMap();
         
         // ⚖️ 균형 잡힌 프리셋 초기 자동 바인딩
         document.querySelectorAll('.preset-btn')[5].classList.add('active');
         applyPreset(5, document.querySelectorAll('.preset-btn')[5]);
         
+        // 초기 듀얼 슬라이더 및 주택 카드 로딩
+        setBudgetType('maemae', document.querySelector('.budget-tab-btn'));
+        
         // 9대 Plotly 통합 차트 일괄 가동
         renderPlotlyCharts();
     });
+
+    // 주택 형태 카드 다중 토글 핸들러
+    function toggleHousingCard(type) {
+        const card = document.getElementById(`card-${type}`);
+        if (card) {
+            card.classList.toggle('active');
+            updateDashboard();
+        }
+    }
+
+    // 듀얼 레인지 슬라이더 트랙 채우기 바 갱신 함수
+    function updateDualSliderTrack(sliderId) {
+        const minInput = document.getElementById(`budget-${sliderId}-min`);
+        const maxInput = document.getElementById(`budget-${sliderId}-max`);
+        const rangeBar = document.getElementById(`${sliderId}-range-bar`);
+        
+        if (!minInput || !maxInput || !rangeBar) return;
+        
+        let minVal = parseInt(minInput.value);
+        let maxVal = parseInt(maxInput.value);
+        
+        if (minVal > maxVal) {
+            const activeEl = document.activeElement;
+            if (activeEl === minInput) {
+                minInput.value = maxVal;
+                minVal = maxVal;
+            } else if (activeEl === maxInput) {
+                maxInput.value = minVal;
+                maxVal = minVal;
+            }
+        }
+        
+        const minPercent = ((minVal - minInput.min) / (minInput.max - minInput.min)) * 100;
+        const maxPercent = ((maxVal - maxInput.min) / (maxInput.max - minInput.min)) * 100;
+        
+        rangeBar.style.left = `${minPercent}%`;
+        rangeBar.style.width = `${maxPercent - minPercent}%`;
+    }
+
+    function onDepositSliderInput() {
+        updateDualSliderTrack('deposit');
+        
+        const minVal = parseInt(document.getElementById('budget-deposit-min').value) || 0;
+        const maxVal = parseInt(document.getElementById('budget-deposit-max').value) || 0;
+        
+        const minText = formatKoreanMoney(minVal);
+        const maxText = formatKoreanMoney(maxVal);
+        
+        document.getElementById('deposit-value-text').textContent = `${minText} ~ ${maxText}`;
+        updateDashboard();
+    }
+
+    function onRentSliderInput() {
+        updateDualSliderTrack('rent');
+        
+        const minVal = parseInt(document.getElementById('budget-rent-min').value) || 0;
+        const maxVal = parseInt(document.getElementById('budget-rent-max').value) || 0;
+        
+        document.getElementById('rent-value-text').textContent = `${minVal}만 ~ ${maxVal}만원`;
+        updateDashboard();
+    }
 
     // 가중치 슬라이더 동적 렌더링
     function initSliders() {
@@ -2202,23 +2487,145 @@
         });
     }
 
-    // 예산 드롭다운 바인딩 (1순위 예산 선택용)
-    function initBudgetDropdown() {
-        const billionSelect = document.getElementById('budget-billion-select');
-        const millionSelect = document.getElementById('budget-million-select');
+    // 현재 활성화된 예산 유형 (기본값: 'maemae' - 매매)
+    let activeBudgetType = 'maemae';
+
+    // 거래 유형 버튼 변경 처리 (매매/전세/월세 듀얼 레인지 맞춤)
+    function setBudgetType(type, btn) {
+        activeBudgetType = type;
         
-        // 0억부터 20억까지 바인딩 (기본값: 1억)
-        for (let i = 0; i <= 20; i++) {
-            const selected = i === 1 ? 'selected' : '';
-            billionSelect.insertAdjacentHTML('beforeend', `<option value="${i}" ${selected}>${i}</option>`);
+        // 버튼 Active 토글
+        document.querySelectorAll('.budget-tab-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        
+        const depositMinInput = document.getElementById('budget-deposit-min');
+        const depositMaxInput = document.getElementById('budget-deposit-max');
+        const depositLabel = document.getElementById('deposit-slider-label');
+        const rentContainer = document.getElementById('rent-slider-container');
+        
+        if (type === 'maemae') {
+            depositLabel.innerHTML = '매매가 범위';
+            
+            depositMinInput.min = '1000';
+            depositMinInput.max = '200000';
+            depositMinInput.step = '1000';
+            depositMinInput.value = '10000'; // 1억 최소 기본
+            
+            depositMaxInput.min = '1000';
+            depositMaxInput.max = '200000';
+            depositMaxInput.step = '1000';
+            depositMaxInput.value = '80000'; // 8억 최대 기본
+            
+            rentContainer.style.display = 'none';
+        } else if (type === 'jeonse') {
+            depositLabel.innerHTML = '보증금 범위';
+            
+            depositMinInput.min = '1000';
+            depositMinInput.max = '100000';
+            depositMinInput.step = '1000';
+            depositMinInput.value = '5000'; // 5000만 최소 기본
+            
+            depositMaxInput.min = '1000';
+            depositMaxInput.max = '100000';
+            depositMaxInput.step = '1000';
+            depositMaxInput.value = '50000'; // 5억 최대 기본
+            
+            rentContainer.style.display = 'none';
+        } else if (type === 'wolse') {
+            depositLabel.innerHTML = '보증금 범위';
+            
+            depositMinInput.min = '500';
+            depositMinInput.max = '50000';
+            depositMinInput.step = '500';
+            depositMinInput.value = '500'; // 500만 최소 기본
+            
+            depositMaxInput.min = '500';
+            depositMaxInput.max = '50000';
+            depositMaxInput.step = '500';
+            depositMaxInput.value = '35000'; // 3.5억 최대 (첨부 이미지 준수!)
+            
+            const rentMinInput = document.getElementById('budget-rent-min');
+            const rentMaxInput = document.getElementById('budget-rent-max');
+            
+            rentMinInput.min = '0';
+            rentMinInput.max = '250';
+            rentMinInput.step = '5';
+            rentMinInput.value = '30'; // 30만 최소 (첨부 이미지 준수!)
+            
+            rentMaxInput.min = '0';
+            rentMaxInput.max = '250';
+            rentMaxInput.step = '5';
+            rentMaxInput.value = '85'; // 85만 최대 (첨부 이미지 준수!)
+            
+            rentContainer.style.display = 'block';
+            updateDualSliderTrack('rent');
         }
         
-        // 0부터 9000만원까지 1000만원 단위 바인딩 (기본값: 5000만원)
-        for (let i = 0; i <= 9; i++) {
-            const selected = i === 5 ? 'selected' : '';
-            const txt = i === 0 ? '0' : `${i},000`;
-            millionSelect.insertAdjacentHTML('beforeend', `<option value="${i}" ${selected}>${txt}</option>`);
+        updateDualSliderTrack('deposit');
+        
+        // 텍스트 강제 갱신
+        if (type === 'wolse') {
+            const depMin = parseInt(depositMinInput.value);
+            const depMax = parseInt(depositMaxInput.value);
+            document.getElementById('deposit-value-text').textContent = `${formatKoreanMoney(depMin)} ~ ${formatKoreanMoney(depMax)}`;
+            
+            const rentMin = parseInt(document.getElementById('budget-rent-min').value);
+            const rentMax = parseInt(document.getElementById('budget-rent-max').value);
+            document.getElementById('rent-value-text').textContent = `${rentMin}만 ~ ${rentMax}만원`;
+        } else {
+            const depMin = parseInt(depositMinInput.value);
+            const depMax = parseInt(depositMaxInput.value);
+            document.getElementById('deposit-value-text').textContent = `${formatKoreanMoney(depMin)} ~ ${formatKoreanMoney(depMax)}`;
         }
+        
+        updateDashboard();
+    }
+
+    // 슬라이더 금액 한글 포맷 출력
+    function formatKoreanMoney(amountManwon) {
+        if (amountManwon === 0) return '0원';
+        const eok = Math.floor(amountManwon / 10000);
+        const man = amountManwon % 10000;
+        let res = '';
+        if (eok > 0) res += `${eok}억 `;
+        if (man > 0) res += `${man.toLocaleString()}만원`;
+        return res.trim();
+    }
+
+    function onBudgetSliderInput() {
+        const depositVal = parseInt(document.getElementById('budget-deposit-range').value) || 0;
+        const rentVal = parseInt(document.getElementById('budget-rent-range').value) || 0;
+        
+        document.getElementById('deposit-value-text').textContent = formatKoreanMoney(depositVal);
+        document.getElementById('rent-value-text').textContent = `${rentVal}만원`;
+    }
+
+    // 시세 텍스트 파싱 도우미 (예: "4.6억" -> 46000만, "34만" -> 34만)
+    function parseMoneyToManwon(str) {
+        if (!str) return 0;
+        let clean = str.replace(/,/g, '').trim();
+        let val = 0;
+        if (clean.includes('억')) {
+            const parts = clean.split('억');
+            val += (parseFloat(parts[0]) || 0) * 10000;
+            if (parts[1] && parts[1].includes('man') || parts[1] && parts[1].includes('만')) {
+                val += parseFloat(parts[1].replace('만', '')) || 0;
+            }
+        } else if (clean.includes('만')) {
+            val += parseFloat(clean.replace('만', '')) || 0;
+        } else {
+            val += parseFloat(clean) * 10000;
+        }
+        return val;
+    }
+
+    function parseWolseToManwon(wolseStr) {
+        if (!wolseStr || !wolseStr.includes('/')) return { deposit: 0, rent: 0 };
+        const parts = wolseStr.split('/');
+        return {
+            deposit: parseMoneyToManwon(parts[0]),
+            rent: parseMoneyToManwon(parts[1])
+        };
     }
 
     // ----------------------------------------------------
@@ -2267,6 +2674,125 @@
         updateDashboard();
     }
 
+    // 사용자가 체크한 선호 주택유형 수집 (카드형 다중 토글 UI 연동)
+    function getSelectedHousingTypes() {
+        const types = [];
+        const isAptActive = document.getElementById('card-apt').classList.contains('active');
+        if (isAptActive) types.push('apt');
+        
+        // 오피스텔, 단독, 다세대는 non_apt 로 분류
+        const isNonAptChecked = 
+            document.getElementById('card-officetel').classList.contains('active') || 
+            document.getElementById('card-house').classList.contains('active') || 
+            document.getElementById('card-villa').classList.contains('active');
+            
+        if (isNonAptChecked) types.push('non_apt');
+        
+        // 아무것도 체크 안 했을 시 기본적으로 둘 다 체크된 것으로 정합성 처리
+        if (types.length === 0) return ['apt', 'non_apt'];
+        return types;
+    }
+
+    // 자치구의 대표 가격 정보를 선택된 주택유형 및 거래유형에 맞춰 만원 단위 정수로 계산
+    function getGuRepresentativePrices(gu, dealType, housingTypes) {
+        let depositSum = 0;
+        let rentSum = 0;
+        let count = 0;
+        
+        gu.bestDongs.forEach(dong => {
+            housingTypes.forEach(hType => {
+                const pricesObj = dong[hType];
+                if (!pricesObj) return;
+                
+                if (dealType === 'maemae') {
+                    if (pricesObj.maemae) {
+                        depositSum += parseMoneyToManwon(pricesObj.maemae);
+                        count++;
+                    }
+                } else if (dealType === 'jeonse') {
+                    if (pricesObj.jeonse) {
+                        depositSum += parseMoneyToManwon(pricesObj.jeonse);
+                        count++;
+                    }
+                } else if (dealType === 'wolse') {
+                    if (pricesObj.wolse) {
+                        const parsed = parseWolseToManwon(pricesObj.wolse);
+                        depositSum += parsed.deposit;
+                        rentSum += parsed.rent;
+                        count++;
+                    }
+                }
+            });
+        });
+        
+        if (count === 0) return { deposit: 0, rent: 0 };
+        return {
+            deposit: Math.round(depositSum / count),
+            rent: Math.round(rentSum / count)
+        };
+    }
+
+    // 거래유형 및 주택유형을 종합 반영한 듀얼 레인지 범위 매칭 스코어링 채점 엔진
+    function calculateBudgetScore(gu, dealType, housingTypes) {
+        const userDepositMin = parseInt(document.getElementById('budget-deposit-min').value) || 0;
+        const userDepositMax = parseInt(document.getElementById('budget-deposit-max').value) || 0;
+        const userRentMin = parseInt(document.getElementById('budget-rent-min').value) || 0;
+        const userRentMax = parseInt(document.getElementById('budget-rent-max').value) || 0;
+        
+        const rep = getGuRepresentativePrices(gu, dealType, housingTypes);
+        
+        // 1) 기본 가격 부담도 점수 (가성비 지수 산정)
+        let priceEfficiency = 50; 
+        if (dealType === 'maemae') {
+            priceEfficiency = Math.max(0, 100 - (rep.deposit / 1500)); 
+        } else if (dealType === 'jeonse') {
+            priceEfficiency = Math.max(0, 100 - (rep.deposit / 700));
+        } else if (dealType === 'wolse') {
+            const totalValue = rep.deposit + (rep.rent * 100); 
+            priceEfficiency = Math.max(0, 100 - (totalValue / 600));
+        }
+        
+        let score = priceEfficiency;
+        
+        // 2) 듀얼 예산 범위 안착 대조 스코어링 가점/감점 부여
+        if (dealType === 'wolse') {
+            let depositExcess = 0;
+            let rentExcess = 0;
+            
+            if (rep.deposit > userDepositMax) depositExcess = rep.deposit - userDepositMax;
+            if (rep.rent > userRentMax) rentExcess = rep.rent - userRentMax;
+            
+            if (depositExcess > 0 || rentExcess > 0) {
+                // 상한 한도 초과 시 엄격한 감점 (보증금 초과 1,000만당 2.5점, 월세 초과 10만당 6점 감점)
+                const penalty = (depositExcess / 1000) * 2.5 + (rentExcess / 10) * 6;
+                score -= Math.min(50, penalty);
+            } else {
+                // 범위 내 완벽 안착 시 보너스 가산
+                if (rep.deposit >= userDepositMin && rep.rent >= userRentMin) {
+                    score += 15; // 최적 범위 안착 보너스
+                } else {
+                    // 최소 예산보다 더 저렴하여 초가성비 확보 시
+                    score += 10;
+                }
+            }
+        } else {
+            if (rep.deposit > userDepositMax) {
+                const excess = rep.deposit - userDepositMax;
+                // 상한선 초과 시 1,000만당 1.5점 감점
+                const penalty = (excess / 1000) * 1.5;
+                score -= Math.min(50, penalty);
+            } else {
+                if (rep.deposit >= userDepositMin) {
+                    score += 15; // 지정 예산 최적 범위 안착 보너스
+                } else {
+                    score += 10; // 초가성비 지대 가점
+                }
+            }
+        }
+        
+        return Math.min(100, Math.max(0, score));
+    }
+
     // 실시간 자치구 종합 스코어링 엔진 및 뷰 업데이트
     // =========================================================================
     // [종합 입지 스코어 산정 세부 메커니즘 가이드]
@@ -2291,27 +2817,12 @@
             const gu = DISTRICT_DATA[key];
 
             // -----------------------------------------------------------------
-            // [1단계 채점] 부동산 예산 점수 (budgetScore) 계산 로직
-            // - 기본 가성비 점수(priceEfficiency): 100 - (구 평균 전세가 * 4.5) 형태의 반비례 함수로 기본 설계
-            // - 초과 패널티: 나의 한도 예산(userBudget)을 초과하는 금액에 비례하여 최대 40점의 감점 패널티 부과 (감점 = 초과액(억) * 8)
-            // - 예산 세이브 보너스: 설정 예산 대비 자치구 시세가 저렴하여 남는 버퍼 금액에 대해 최대 10점의 가산점 보너스 부여 (보너스 = 여유자금(억) * 2)
+            // [1단계 채점] 부동산 예산 점수 (budgetScore) 계산 로직 (개편)
+            // - 거래유형(매매/전세/월세) 및 주택유형별 시세를 다차원으로 반영하여
+            //   실질적으로 개인 맞춤형 스코어링을 정교하게 산출합니다.
             // -----------------------------------------------------------------
-            const budgetBillion = parseFloat(document.getElementById('budget-billion-select').value) || 0;
-            const budgetMillion = parseFloat(document.getElementById('budget-million-select').value) || 0;
-            const userBudget = budgetBillion + budgetMillion / 10;
-            
-            const priceEfficiency = Math.max(0, 100 - (gu.price * 4.5));
-            let budgetScore = priceEfficiency;
-            if (gu.price > userBudget) {
-                const excess = gu.price - userBudget;
-                const budgetPenalty = Math.min(40, excess * 8); // 예산 한도 초과 시 대출 리스크 반영 감점
-                budgetScore -= budgetPenalty;
-            } else {
-                const saving = userBudget - gu.price;
-                const budgetBonus = Math.min(10, saving * 2); // 예산 세이브를 통한 가처분소득 확보 가점
-                budgetScore += budgetBonus;
-            }
-            budgetScore = Math.min(100, Math.max(0, budgetScore));
+            const hTypes = getSelectedHousingTypes();
+            const budgetScore = calculateBudgetScore(gu, activeBudgetType, hTypes);
 
             // -----------------------------------------------------------------
             // [2단계 채점] 8대 라이프스타일 퀵 프리셋 점수 (presetScore)
@@ -2435,32 +2946,60 @@
             const dong1 = gu.bestDongs[0];
             const dong2 = gu.bestDongs[1];
             
-            const budgetBillion = parseFloat(document.getElementById('budget-billion-select').value) || 0;
-            const budgetMillion = parseFloat(document.getElementById('budget-million-select').value) || 0;
-            const userBudget = budgetBillion + budgetMillion / 10;
+            const hTypes = getSelectedHousingTypes();
+            const rep1 = getGuRepresentativePrices(gu, activeBudgetType, hTypes);
             
-            const dong1NonAptJeonse = parseFloat(dong1.non_apt.jeonse) || 0;
+            const userDepositMin = parseInt(document.getElementById('budget-deposit-min').value) || 0;
+            const userDepositMax = parseInt(document.getElementById('budget-deposit-max').value) || 0;
+            const userRentMin = parseInt(document.getElementById('budget-rent-min').value) || 0;
+            const userRentMax = parseInt(document.getElementById('budget-rent-max').value) || 0;
+            
             let budgetComparisonText = "";
-            if (dong1NonAptJeonse > userBudget) {
-                const over = (dong1NonAptJeonse - userBudget).toFixed(1);
-                budgetComparisonText = `
-                    <div style="font-size: 14.5px; font-weight: 800; color: var(--accent); margin-bottom: 6px;">⚠️ 실주거 예산 초과</div>
-                    <div style="font-size: 13.5px; line-height: 1.65; color: var(--text-main);">
-                        30대 선호 비아파트(다세대/오피스텔) 대표 동인 <strong>[${dong1.dong}]</strong>의 평균 전세가(<strong>${dong1.non_apt.jeonse}</strong>)가<br>
-                        설정하신 나의 예산 한도 (${userBudget.toFixed(2)}억)를 <strong>${over}억 초과</strong>합니다.<br>
-                        예산 방어를 위해 월세형이나 가성비가 높은 대안지를 검토하십시오.
-                    </div>
-                `;
+            let typeLabel = activeBudgetType === 'maemae' ? '매매가' : (activeBudgetType === 'jeonse' ? '전세 보증금' : '월세 보증금');
+            
+            if (activeBudgetType === 'wolse') {
+                let isOver = rep1.deposit > userDepositMax || rep1.rent > userRentMax;
+                if (isOver) {
+                    let overText = [];
+                    if (rep1.deposit > userDepositMax) overText.push(`보증금 ${(rep1.deposit - userDepositMax).toLocaleString()}만원 초과`);
+                    if (rep1.rent > userRentMax) overText.push(`월세 ${(rep1.rent - userRentMax)}만원 초과`);
+                    
+                    budgetComparisonText = `
+                        <div style="font-size: 14.5px; font-weight: 800; color: var(--accent); margin-bottom: 6px;">⚠️ 실주거 예산 범위 초과 (월세)</div>
+                        <div style="font-size: 13.5px; line-height: 1.65; color: var(--text-main);">
+                            대표 동 <strong>[${dong1.dong}]</strong>의 평균 시세(보증금 ${formatKoreanMoney(rep1.deposit)} / 월세 ${rep1.rent}만원)가 설정하신 최대 예산 한도를 초과합니다.<br>
+                            <span style="color: var(--accent); font-weight: 700;">➔ ${overText.join(', ')}</span><br>
+                            더 저렴한 가성비 구역을 검토하거나 보증금/월세 예산 설계를 조정하십시오.
+                        </div>
+                    `;
+                } else {
+                    budgetComparisonText = `
+                        <div style="font-size: 14.5px; font-weight: 800; color: var(--success); margin-bottom: 6px;">🟢 실주거 예산 범위 안착 (월세)</div>
+                        <div style="font-size: 13.5px; line-height: 1.65; color: var(--text-main);">
+                            대표 동 <strong>[${dong1.dong}]</strong>의 평균 시세(보증금 ${formatKoreanMoney(rep1.deposit)} / 월세 ${rep1.rent}만원)가<br>
+                            설정하신 예산 범위(${formatKoreanMoney(userDepositMin)}~${formatKoreanMoney(userDepositMax)} / ${userRentMin}만~${userRentMax}만) 내에 안정적으로 안착합니다.
+                        </div>
+                    `;
+                }
             } else {
-                const under = (userBudget - dong1NonAptJeonse).toFixed(1);
-                budgetComparisonText = `
-                    <div style="font-size: 14.5px; font-weight: 800; color: var(--success); margin-bottom: 6px;">🟢 실주거 예산 안착</div>
-                    <div style="font-size: 13.5px; line-height: 1.65; color: var(--text-main);">
-                        30대 선호 비아파트(다세대/오피스텔) 대표 동인 <strong>[${dong1.dong}]</strong>의 평균 전세가(<strong>${dong1.non_apt.jeonse}</strong>)가<br>
-                        설정하신 나의 예산 한도 (${userBudget.toFixed(2)}억) 대비 <strong>${under}억의 재무적 버퍼</strong>를 안정적으로 확보하여<br>
-                        안전한 지출 방어가 가능합니다.
-                    </div>
-                `;
+                if (rep1.deposit > userDepositMax) {
+                    const over = rep1.deposit - userDepositMax;
+                    budgetComparisonText = `
+                        <div style="font-size: 14.5px; font-weight: 800; color: var(--accent); margin-bottom: 6px;">⚠️ 실주거 예산 범위 초과 (${activeBudgetType === 'maemae' ? '매매' : '전세'})</div>
+                        <div style="font-size: 13.5px; line-height: 1.65; color: var(--text-main);">
+                            대표 동 <strong>[${dong1.dong}]</strong>의 평균 ${typeLabel}(<strong>${formatKoreanMoney(rep1.deposit)}</strong>)이<br>
+                            설정하신 최대 예산 한도 (${formatKoreanMoney(userDepositMax)})를 <strong style="color: var(--accent);">${formatKoreanMoney(over)} 초과</strong>합니다. 예산 범위 조정을 고려하십시오.
+                        </div>
+                    `;
+                } else {
+                    budgetComparisonText = `
+                        <div style="font-size: 14.5px; font-weight: 800; color: var(--success); margin-bottom: 6px;">🟢 실주거 예산 범위 안착 (${activeBudgetType === 'maemae' ? '매매' : '전세'})</div>
+                        <div style="font-size: 13.5px; line-height: 1.65; color: var(--text-main);">
+                            대표 동 <strong>[${dong1.dong}]</strong>의 평균 ${typeLabel}(<strong>${formatKoreanMoney(rep1.deposit)}</strong>)이<br>
+                            설정하신 예산 범위(${formatKoreanMoney(userDepositMin)} ~ ${formatKoreanMoney(userDepositMax)}) 내에 안정적으로 매칭됩니다.
+                        </div>
+                    `;
+                }
             }
             
             const html = `
@@ -2525,11 +3064,19 @@
                         const gu = DISTRICT_DATA[guName];
                         const score = p.data.value;
 
-                        // 가계수지/실거래 경고 시스템 작동
+                        // 가계수지/실거래 경고 시스템 작동 (실시간 선택된 주택유형 및 거래유형에 맞춰 경고 분기!)
+                        const hTypes = getSelectedHousingTypes();
+                        const rep = getGuRepresentativePrices(gu, activeBudgetType, hTypes);
+                        
                         let budgetWarning = "🟢 합리적인 주택 시세 벨트입니다! 주거비 부담이 적으므로 확보된 가처분 소득을 자기개발과 저축에 집중 배분하되, 인근 무료 공공 SOC 혜택까지 활용한다면 종잣돈 형성 속도를 2배 이상 앞당길 수 있습니다.";
-                        if (gu.price >= 15.0) {
+                        
+                        // 전세 환산가 개념 적용하여 경고 레벨 산정 (매매/전세 보증금 또는 월세 전세환산가)
+                        let refPrice = rep.deposit;
+                        if (activeBudgetType === 'wolse') refPrice = rep.deposit + (rep.rent * 100);
+                        
+                        if (refPrice >= 15000) { 
                             budgetWarning = "⚠️ 주거비 경직도 극도로 주의! 월 고정 주거비 지출이 소득 대비 매우 과다하므로 가계수지 악화를 선제 방어해야 합니다. 개인 도서 구입, 헬스장 등 여가 소비를 전면 중단하고 자치구의 무료 공공도서관 및 시립 체육시설로 대체하여 극단적인 지출 다이어트를 무조건 실행하십시오.";
-                        } else if (gu.price >= 9.0) {
+                        } else if (refPrice >= 9000) { 
                             budgetWarning = "⚠️ 주거비 다소 경직! 예산 대비 고정비 압박이 유의미한 수준입니다. 매달 누수되는 외식비나 배달비, 문화 소비를 강도 높게 통제하고, 인근 근근공원 산책이나 공공 문화 혜택 등 돈이 들지 않는 무료 인프라를 주거 라이프에 적극 통합하여 가처분 소득을 영리하게 수호하십시오.";
                         }
 
@@ -2537,18 +3084,32 @@
                         const getHighlightStyle = (key) => weights[key] >= 7 ? 'background-color: var(--primary-light); color: var(--primary); border: 1px solid rgba(79, 70, 229, 0.3);' : 'background-color: var(--slate-light); color: var(--text-main);';
 
                         // 1순위 예산 실시간 적합성 판정
-                        const budgetBillion = parseFloat(document.getElementById('budget-billion-select').value) || 0;
-                        const budgetMillion = parseFloat(document.getElementById('budget-million-select').value) || 0;
-                        const userBudget = budgetBillion + budgetMillion / 10;
+                        const userDepositMin = parseInt(document.getElementById('budget-deposit-min').value) || 0;
+                        const userDepositMax = parseInt(document.getElementById('budget-deposit-max').value) || 0;
+                        const userRentMin = parseInt(document.getElementById('budget-rent-min').value) || 0;
+                        const userRentMax = parseInt(document.getElementById('budget-rent-max').value) || 0;
                         
                         let budgetBadgeHtml = "";
-                        if (gu.price > userBudget) {
-                            const over = (gu.price - userBudget).toFixed(1);
-                            budgetBadgeHtml = `<span style="color: var(--accent); font-weight: 800;">🔴 ${over}억 초과</span>`;
+                        if (activeBudgetType === 'wolse') {
+                            const isOver = rep.deposit > userDepositMax || rep.rent > userRentMax;
+                            if (isOver) {
+                                budgetBadgeHtml = `<span style="color: var(--accent); font-weight: 800;">🔴 한도 초과</span>`;
+                            } else {
+                                budgetBadgeHtml = `<span style="color: var(--success); font-weight: 800;">🟢 충족</span>`;
+                            }
                         } else {
-                            const under = (userBudget - gu.price).toFixed(1);
-                            budgetBadgeHtml = `<span style="color: var(--success); font-weight: 800;">🟢 충족 (여유 ${under}억)</span>`;
+                            if (rep.deposit > userDepositMax) {
+                                const overVal = ((rep.deposit - userDepositMax) / 10000).toFixed(1);
+                                budgetBadgeHtml = `<span style="color: var(--accent); font-weight: 800;">🔴 ${overVal}억 초과</span>`;
+                            } else {
+                                budgetBadgeHtml = `<span style="color: var(--success); font-weight: 800;">🟢 충족</span>`;
+                            }
                         }
+
+                        let priceLabelText = activeBudgetType === 'maemae' ? '평균 매매 가격' : (activeBudgetType === 'jeonse' ? '평균 전세 가격' : '평균 월세 가격');
+                        let priceValueText = activeBudgetType === 'wolse' 
+                            ? `보증금 ${formatKoreanMoney(rep.deposit)} / ${rep.rent}만`
+                            : `약 ${formatKoreanMoney(rep.deposit)}`;
 
                         const dong1 = gu.bestDongs[0];
                         const dong2 = gu.bestDongs[1];
@@ -2583,7 +3144,7 @@
                                     <div style="display: flex; flex-direction: column; gap: 10px;">
                                         <div style="font-size: 12.5px;">
                                             <div style="font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">🪙 부동산 실거래가 지표 및 예산 연동</div>
-                                            <div style="display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 2px;"><span>평균 실거래 가격:</span><strong>약 ${(gu.price).toFixed(1)}억원</strong></div>
+                                            <div style="display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 2px;"><span>${priceLabelText}:</span><strong>${priceValueText}</strong></div>
                                             <div style="display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 2px;"><span>나의 예산 적합성:</span><strong>${budgetBadgeHtml}</strong></div>
                                         </div>
                                         <div style="font-size: 11.5px; background-color: var(--slate-light); padding: 10px 12px; border-radius: var(--radius-sm); border-top: 1.5px solid #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
@@ -2714,76 +3275,159 @@
         const dongA = guA.bestDongs[0];
         const dongB = guB.bestDongs[0];
         
-        // 아파트 전세/매매 비교
-        const aptJeonseA = parseFloat(dongA.apt.jeonse) || 0;
-        const aptJeonseB = parseFloat(dongB.apt.jeonse) || 0;
-        const aptJeonseDiff = Math.abs(aptJeonseA - aptJeonseB).toFixed(1);
-
-        const aptMaemaeA = parseFloat(dongA.apt.maemae) || 0;
-        const aptMaemaeB = parseFloat(dongB.apt.maemae) || 0;
-        const aptMaemaeDiff = Math.abs(aptMaemaeA - aptMaemaeB).toFixed(1);
-
-        // 비아파트 전세/월세 비교 (30대 실거주 선호 다세대/오피스텔)
-        const nonAptJeonseA = parseFloat(dongA.non_apt.jeonse) || 0;
-        const nonAptJeonseB = parseFloat(dongB.non_apt.jeonse) || 0;
-        const nonAptJeonseDiff = Math.abs(nonAptJeonseA - nonAptJeonseB).toFixed(1);
-
         let priceCompareText = "";
-        
-        // 30대 1인가구 주거 특성에 기반한 비아파트 전세 비교
-        let nonAptCompareHtml = "";
-        if (nonAptJeonseA > nonAptJeonseB) {
-            nonAptCompareHtml = `
-                <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 전세 비교 (오피스텔/다세대)</div>
-                <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
-                    • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: ${dongB.non_apt.jeonse} <br>
-                    • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: ${dongA.non_apt.jeonse} <br>
-                    ➔ <strong>${selectedDistrictB}</strong>가 <strong>${nonAptJeonseDiff}억원 더 저렴</strong>하여 청년 예산 방어에 유리합니다.
-                </div>
-            `;
-        } else if (nonAptJeonseB > nonAptJeonseA) {
-            nonAptCompareHtml = `
-                <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 전세 비교 (오피스텔/다세대)</div>
-                <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
-                    • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: ${dongA.non_apt.jeonse} <br>
-                    • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: ${dongB.non_apt.jeonse} <br>
-                    ➔ <strong>${selectedDistrictA}</strong>가 <strong>${nonAptJeonseDiff}억원 더 저렴</strong>하여 청년 예산 방어에 유리합니다.
-                </div>
-            `;
-        } else {
-            nonAptCompareHtml = `
-                <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 전세 비교 (오피스텔/다세대)</div>
-                <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
-                    • 두 지역 대표 동의 비아파트 전세 시세가 <strong>${dongA.non_apt.jeonse}</strong>으로 동일하여 청년 지출 부담 차이가 없습니다.
-                </div>
-            `;
-        }
-
-        // 아파트 비교
         let aptCompareHtml = "";
-        if (aptJeonseA > aptJeonseB) {
-            aptCompareHtml = `
-                <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 전세 및 매매 비교</div>
-                <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
-                    • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 전세 ${dongB.apt.jeonse} (매매 ${dongB.apt.maemae}) <br>
-                    • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 전세 ${dongA.apt.jeonse} (매매 ${dongA.apt.maemae}) <br>
-                    ➔ <strong>${selectedDistrictB}</strong>가 전세 기준 <strong>${aptJeonseDiff}억원 더 저렴</strong>하며, 매매 격차는 <strong>${aptMaemaeDiff}억원</strong>입니다.
+        let nonAptCompareHtml = "";
+
+        if (activeBudgetType === 'maemae') {
+            // 매매 비교
+            const aptMaemaeA = parseMoneyToManwon(dongA.apt.maemae);
+            const aptMaemaeB = parseMoneyToManwon(dongB.apt.maemae);
+            const aptMaemaeDiff = Math.abs(aptMaemaeA - aptMaemaeB);
+            
+            if (aptMaemaeA > aptMaemaeB) {
+                aptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 매매 시세 비교</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
+                        • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 평균 매매 약 ${formatKoreanMoney(aptMaemaeB)} <br>
+                        • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 평균 매매 약 ${formatKoreanMoney(aptMaemaeA)} <br>
+                        ➔ <strong>${selectedDistrictB}</strong>가 <strong>${formatKoreanMoney(aptMaemaeDiff)} 더 저렴</strong>하여 주택 구매 비용 절감에 유리합니다.
+                    </div>
+                `;
+            } else if (aptMaemaeB > aptMaemaeA) {
+                aptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 매매 시세 비교</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
+                        • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 평균 매매 약 ${formatKoreanMoney(aptMaemaeA)} <br>
+                        • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 평균 매매 약 ${formatKoreanMoney(aptMaemaeB)} <br>
+                        ➔ <strong>${selectedDistrictA}</strong>가 <strong>${formatKoreanMoney(aptMaemaeDiff)} 더 저렴</strong>하여 주택 구매 비용 절감에 유리합니다.
+                    </div>
+                `;
+            } else {
+                aptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 매매 시세 비교</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
+                        • 두 지역 대표 동의 평균 매매 가격이 <strong>${formatKoreanMoney(aptMaemaeA)}</strong>으로 동일합니다.
+                    </div>
+                `;
+            }
+
+            nonAptCompareHtml = `
+                <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 매매 시세 비교 (오피스텔/다세대)</div>
+                <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
+                    • 비아파트(오피스텔/다세대 등)는 임대차(전세/월세) 위주의 데이터로 구축되어 매매 실거래 정보가 제한됩니다.<br>
+                    • 참고 (비아파트 평균 전세):<br>
+                    &nbsp;&nbsp;- <strong>${selectedDistrictA} [${dongA.dong}]</strong>: ${dongA.non_apt.jeonse}<br>
+                    &nbsp;&nbsp;- <strong>${selectedDistrictB} [${dongB.dong}]</strong>: ${dongB.non_apt.jeonse}
                 </div>
             `;
-        } else if (aptJeonseB > aptJeonseA) {
+
+        } else if (activeBudgetType === 'jeonse') {
+            // 전세 비교
+            const aptJeonseA = parseMoneyToManwon(dongA.apt.jeonse);
+            const aptJeonseB = parseMoneyToManwon(dongB.apt.jeonse);
+            const aptJeonseDiff = Math.abs(aptJeonseA - aptJeonseB);
+
+            if (aptJeonseA > aptJeonseB) {
+                aptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 전세 시세 비교</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
+                        • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 평균 전세 약 ${formatKoreanMoney(aptJeonseB)} <br>
+                        • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 평균 전세 약 ${formatKoreanMoney(aptJeonseA)} <br>
+                        ➔ <strong>${selectedDistrictB}</strong>가 <strong>${formatKoreanMoney(aptJeonseDiff)} 더 저렴</strong>하여 전세 보증금 조달 부담이 적습니다.
+                    </div>
+                `;
+            } else if (aptJeonseB > aptJeonseA) {
+                aptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 전세 시세 비교</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
+                        • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 평균 전세 약 ${formatKoreanMoney(aptJeonseA)} <br>
+                        • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 평균 전세 약 ${formatKoreanMoney(aptJeonseB)} <br>
+                        ➔ <strong>${selectedDistrictA}</strong>가 <strong>${formatKoreanMoney(aptJeonseDiff)} 더 저렴</strong>하여 전세 보증금 조달 부담이 적습니다.
+                    </div>
+                `;
+            } else {
+                aptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 전세 시세 비교</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
+                        • 두 지역 대표 동의 평균 전세 가격이 <strong>${formatKoreanMoney(aptJeonseA)}</strong>으로 동일합니다.
+                    </div>
+                `;
+            }
+
+            const nonAptJeonseA = parseMoneyToManwon(dongA.non_apt.jeonse);
+            const nonAptJeonseB = parseMoneyToManwon(dongB.non_apt.jeonse);
+            const nonAptJeonseDiff = Math.abs(nonAptJeonseA - nonAptJeonseB);
+
+            if (nonAptJeonseA > nonAptJeonseB) {
+                nonAptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 전세 시세 비교 (오피스텔/다세대)</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
+                        • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 평균 전세 약 ${formatKoreanMoney(nonAptJeonseB)} <br>
+                        • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 평균 전세 약 ${formatKoreanMoney(nonAptJeonseA)} <br>
+                        ➔ <strong>${selectedDistrictB}</strong>가 <strong>${formatKoreanMoney(nonAptJeonseDiff)} 더 저렴</strong>하여 1인/청년 가구의 목돈 마련 부담이 적습니다.
+                    </div>
+                `;
+            } else if (nonAptJeonseB > nonAptJeonseA) {
+                nonAptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 전세 시세 비교 (오피스텔/다세대)</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
+                        • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 평균 전세 약 ${formatKoreanMoney(nonAptJeonseA)} <br>
+                        • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 평균 전세 약 ${formatKoreanMoney(nonAptJeonseB)} <br>
+                        ➔ <strong>${selectedDistrictA}</strong>가 <strong>${formatKoreanMoney(nonAptJeonseDiff)} 더 저렴</strong>하여 1인/청년 가구의 목돈 마련 부담이 적습니다.
+                    </div>
+                `;
+            } else {
+                nonAptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 전세 시세 비교 (오피스텔/다세대)</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
+                        • 두 지역 대표 동의 비아파트 평균 전세 가격이 <strong>${formatKoreanMoney(nonAptJeonseA)}</strong>으로 동일합니다.
+                    </div>
+                `;
+            }
+
+        } else if (activeBudgetType === 'wolse') {
+            // 월세 비교
+            const wolseA = parseWolseToManwon(dongA.non_apt.wolse);
+            const wolseB = parseWolseToManwon(dongB.non_apt.wolse);
+            
+            const totalA = wolseA.deposit + (wolseA.rent * 100);
+            const totalB = wolseB.deposit + (wolseB.rent * 100);
+            const wolseDiff = Math.abs(totalA - totalB);
+
+            if (totalA > totalB) {
+                nonAptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 월세 시세 비교 (오피스텔/다세대)</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
+                        • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 보증금 ${formatKoreanMoney(wolseB.deposit)} / 월세 ${wolseB.rent}만원 <br>
+                        • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 보증금 ${formatKoreanMoney(wolseA.deposit)} / 월세 ${wolseA.rent}만원 <br>
+                        ➔ 환산금액(보증금+월세*100) 기준 <strong>${selectedDistrictB}</strong>가 <strong>더 저렴(여유 환산가 약 ${formatKoreanMoney(wolseDiff)})</strong>하여 청년 가구의 월 고정비 부담을 줄여줍니다.
+                    </div>
+                `;
+            } else if (totalB > totalA) {
+                nonAptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 월세 시세 비교 (오피스텔/다세대)</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
+                        • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 보증금 ${formatKoreanMoney(wolseA.deposit)} / 월세 ${wolseA.rent}만원 <br>
+                        • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 보증금 ${formatKoreanMoney(wolseB.deposit)} / 월세 ${wolseB.rent}만원 <br>
+                        ➔ 환산금액(보증금+월세*100) 기준 <strong>${selectedDistrictA}</strong>가 <strong>더 저렴(여유 환산가 약 ${formatKoreanMoney(wolseDiff)})</strong>하여 청년 가구의 월 고정비 부담을 줄여줍니다.
+                    </div>
+                `;
+            } else {
+                nonAptCompareHtml = `
+                    <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #fbcfe8;">🏡 비아파트 월세 시세 비교 (오피스텔/다세대)</div>
+                    <div style="font-size: 12.5px; line-height: 1.55; color: #f8fafc; padding-left: 6px;">
+                        • 두 지역 대표 동의 비아파트 월세 시세가 <strong>보증금 ${formatKoreanMoney(wolseA.deposit)} / 월세 ${wolseA.rent}만원</strong>으로 동일합니다.
+                    </div>
+                `;
+            }
+
             aptCompareHtml = `
-                <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 전세 및 매매 비교</div>
+                <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 월세 대안 검토 (전세 참고)</div>
                 <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
-                    • <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 전세 ${dongA.apt.jeonse} (매매 ${dongA.apt.maemae}) <br>
-                    • <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 전세 ${dongB.apt.jeonse} (매매 ${dongB.apt.maemae}) <br>
-                    ➔ <strong>${selectedDistrictA}</strong>가 전세 기준 <strong>${aptJeonseDiff}억원 더 저렴</strong>하며, 매매 격차는 <strong>${aptMaemaeDiff}억원</strong>입니다.
-                </div>
-            `;
-        } else {
-            aptCompareHtml = `
-                <div style="margin-bottom: 6px; font-weight: 800; font-size: 13.5px; color: #e0e7ff;">🏢 아파트 전세 및 매매 비교</div>
-                <div style="font-size: 12.5px; line-height: 1.55; color: #f1f5f9; padding-left: 6px;">
-                    • 두 지역 대표 동의 아파트 전세 시세가 <strong>${dongA.apt.jeonse}</strong>으로 동일하며, 매매 격차는 <strong>${aptMaemaeDiff}억원</strong> 수준입니다.
+                    • 아파트는 주로 전세/매매 위주 거래이며 월세 데이터는 제한됩니다. 참고로 아파트 전세 시세는 다음과 같습니다:<br>
+                    &nbsp;&nbsp;- <strong>${selectedDistrictA} [${dongA.dong}]</strong>: 평균 전세 약 ${dongA.apt.jeonse}<br>
+                    &nbsp;&nbsp;- <strong>${selectedDistrictB} [${dongB.dong}]</strong>: 평균 전세 약 ${dongB.apt.jeonse}
                 </div>
             `;
         }
@@ -2865,21 +3509,9 @@
         });
         const office = document.getElementById('office-select').value;
 
-        // 1) 부동산 예산 점수 (budgetScore)
-        const budgetBillion = parseFloat(document.getElementById('budget-billion-select').value) || 0;
-        const budgetMillion = parseFloat(document.getElementById('budget-million-select').value) || 0;
-        const userBudget = budgetBillion + budgetMillion / 10;
-        
-        const priceEfficiency = Math.max(0, 100 - (gu.price * 4.5));
-        let budgetScore = priceEfficiency;
-        if (gu.price > userBudget) {
-            const excess = gu.price - userBudget;
-            budgetScore -= Math.min(40, excess * 8); // 초과 패널티 감점
-        } else {
-            const saving = userBudget - gu.price;
-            budgetScore += Math.min(10, saving * 2); // 여유 보너스
-        }
-        budgetScore = Math.min(100, Math.max(0, budgetScore));
+        // 1) 부동산 예산 점수 (budgetScore) (개편)
+        const hTypes = getSelectedHousingTypes();
+        const budgetScore = calculateBudgetScore(gu, activeBudgetType, hTypes);
 
         // 2) 라이프스타일 프리셋 점수 (presetScore)
         const pWeights = PRESETS[activePresetIndex];
