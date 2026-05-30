@@ -3760,12 +3760,13 @@
                 barmode: 'group',
                 radialaxis: { 
                     ticksuffix: '%', 
-                    angle: 45, 
+                    angle: 90, // 눈금선 각도는 90도(12시 방향) 기본 유지
                     gridcolor: '#cbd5e1',
                     tickfont: { size: 10, fontWeight: 'bold', color: '#1e293b' } 
                 },
                 angularaxis: { 
                     direction: 'clockwise', 
+                    rotation: 126, // 차트 전체를 36도 회전시켜 12시 방향(90도)이 카테고리 사이의 넓은 흰색 빈 공간이 되도록 제어
                     gridcolor: '#cbd5e1',
                     tickfont: { size: 11, fontWeight: 'bold' } 
                 }
