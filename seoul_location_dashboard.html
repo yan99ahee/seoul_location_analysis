@@ -1671,7 +1671,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="chart-desc-box">20대에서 30대, 그리고 40대로 생애주기가 이행됨에 따라 오피스텔과 다가구 원룸에서 단지형 아파트 거주 형태로 점진적 상향 이동을 꾀하는 '주거 사다리' 스텝업 곡선이 통계적으로 명확하게 입증됩니다. 30대는 오피스텔(35.6%)과 아파트(20.8%) 사이에서 경제적 가용 예산과 실생활 쾌적함의 균형을 치열하게 고민하는 과도기적 정주 징검다리에 위치합니다. 따라서 섣부른 무리수로 금융적 압박을 받기보다는 본인의 보증금 예산 한도 내에서 최대한의 주거 다이어트 효율을 달성하고, 한 단계 스텝업하기 위한 종잣돈 마련에 집중하는 자금 배분 및 주거 탐색 전략을 설계해야 함을 설득력 있게 제언합니다.</div>
+            <div class="chart-desc-box">연령대별 100% 누적 막대그래프를 통해 생애주기별 거처 종류의 뚜렷한 구성비 변화를 왜곡 없이 선명하게 대조할 수 있습니다. 20·30대 막대에서는 <strong>단독주택</strong>과 <strong>오피스텔 등</strong> 비아파트 유형이 구성비의 대부분(70% 이상)을 차지하여 청년층 1인가구 주거의 견고한 중추 역할을 수행하고 있음을 직관적으로 입증합니다. 반면 <strong>아파트</strong> 점유율은 20대(10%)에서 30대(20.8%), 그리고 40대(35%)로 연령층이 올라감에 따라 누적 막대 상단에서 비중이 계단식으로 크게 넓어지는 상향 생애 패턴을 투영합니다. 이는 30대 과도기 징검다리에서 예산 방어와 실리적 정주 효율 확보가 최선의 종잣돈 형성 전략임을 방증합니다.</div>
         </div>
 
         <!-- 차트 5: 시간대별 생활인구 히트맵 -->
@@ -3726,59 +3726,74 @@
             parents: ["", "30대 1인가구", "30대 1인가구", "비아파트 (73%)", "비아파트 (73%)", "비아파트 (73%)", "비아파트 (73%)"],
             values: [393500, 287255, 106245, 129120, 110623, 42435, 5077],
             branchvalues: "total",
-            marker: { colors: ['#4f46e5', '#db2777', '#d97706', '#f472b6', '#38bdf8', '#818cf8', '#cbd5e1'] }
+            marker: { colors: ['#4f46e5', '#db2777', '#d97706', '#f472b6', '#38bdf8', '#818cf8', '#cbd5e1'] },
+            insidetextfont: { color: 'white', family: "Pretendard, Noto Sans KR, sans-serif", size: 11 },
+            outsidetextfont: { color: 'white', family: "Pretendard, Noto Sans KR, sans-serif", size: 11 }
         }];
         Plotly.newPlot('plot-3', data3, { margin: { t: 0, b: 0, l: 0, r: 0 } }, { responsive: true, displayModeBar: false });
 
-        // 4. 방사형 막대그래프 (Radial Bar Chart / Grouped Polar Bar) — 연령대별 거처 종류 비교
-        const categories4 = ['단독주택', '오피스텔 등', '다세대주택', '아파트', '연립주택'];
+        // 4. 연령별 누적 막대그래프 (100% Stacked Bar Chart) — 연령대별 거처 종류 비교
+        const ages4 = ['20대', '30대', '40대'];
         const data4 = [
             {
-                type: 'barpolar',
-                r: [40.0, 33.0, 15.0, 10.0, 2.0],
-                theta: categories4,
-                name: '20대',
-                marker: { color: '#94a3b8' }
+                x: ages4,
+                y: [40.0, 30.5, 25.0],
+                type: 'bar',
+                name: '단독주택',
+                marker: { color: '#818cf8' } // 소프트 라벤더
             },
             {
-                type: 'barpolar',
-                r: [30.5, 35.6, 11.7, 20.8, 1.4],
-                theta: categories4,
-                name: '30대 (강조)',
-                marker: { color: colorPrimary }
+                x: ages4,
+                y: [33.0, 35.6, 25.0],
+                type: 'bar',
+                name: '오피스텔 등',
+                marker: { color: '#38bdf8' } // 스카이 블루
             },
             {
-                type: 'barpolar',
-                r: [25.0, 25.0, 12.0, 35.0, 3.0],
-                theta: categories4,
-                name: '40대',
-                marker: { color: colorAccent }
+                x: ages4,
+                y: [15.0, 11.7, 12.0],
+                type: 'bar',
+                name: '다세대주택',
+                marker: { color: '#cbd5e1' } // 차분한 그레이
+            },
+            {
+                x: ages4,
+                y: [10.0, 20.8, 35.0],
+                type: 'bar',
+                name: '아파트',
+                marker: { color: colorPrimary } // 인디고 블루 메인컬러
+            },
+            {
+                x: ages4,
+                y: [2.0, 1.4, 3.0],
+                type: 'bar',
+                name: '연립주택',
+                marker: { color: '#e2e8f0' } // 아주 옅은 그레이
             }
         ];
         const layout4 = {
-            polar: {
-                barmode: 'group',
-                radialaxis: { 
-                    ticksuffix: '%', 
-                    angle: 90, // 눈금선 각도는 90도(12시 방향) 기본 유지
-                    gridcolor: '#cbd5e1',
-                    tickfont: { size: 10, fontWeight: 'bold', color: '#1e293b' } 
-                },
-                angularaxis: { 
-                    direction: 'clockwise', 
-                    rotation: 126, // 차트 전체를 36도 회전시켜 12시 방향(90도)이 카테고리 사이의 넓은 흰색 빈 공간이 되도록 제어
-                    gridcolor: '#cbd5e1',
-                    tickfont: { size: 11, fontWeight: 'bold' } 
-                }
+            barmode: 'stack',
+            xaxis: { 
+                tickfont: { size: 12, fontWeight: 'bold', color: '#1e293b' },
+                gridcolor: '#f1f5f9'
             },
-            margin: { t: 40, b: 40, l: 40, r: 40 },
+            yaxis: { 
+                title: { text: '점유 비중 (%)', font: { size: 12, fontWeight: 'bold', color: '#475569' } },
+                ticksuffix: '%', 
+                gridcolor: '#f1f5f9',
+                range: [0, 100],
+                tickfont: { size: 11, fontWeight: 'bold', color: '#1e293b' }
+            },
+            margin: { t: 40, b: 40, l: 50, r: 20 },
             legend: { 
                 orientation: 'h', 
                 x: 0.5, 
                 y: -0.15, 
                 xanchor: 'center', 
                 font: { size: 11, family: "Pretendard, Noto Sans KR, sans-serif" } 
-            }
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
         };
         Plotly.newPlot('plot-4', data4, layout4, { responsive: true, displayModeBar: false });
 
